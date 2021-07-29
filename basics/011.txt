@@ -1,0 +1,156 @@
+#Provider
+
+#https://stackoverflow.com/questions/52249578/how-to-deal-with-unwanted-widget-build
+
+1.Make a class
+2.Extend it with ChangeNotifier
+  -- This will enable us to rebuild all the widgets that depend/listen  on this class
+  -- i.e It will give us access to notifyListeners()
+3.So now, what depends on class ??
+  -- In provider <3.0 we use builder
+
+  ChangeNotifier(){
+      builder: (ctx) => ClassObject(),
+      child: widget(),
+  }
+
+  -- In provider >3.0 we use create
+
+  ChangeNotifier(){
+      create: (ctx) => ClassObject(),
+      child: widget(),
+  }
+
+  // So now the child is associated with that ClassObject()
+  // Whenever we call notifyListeners() for that classObject the widget that are listening will be rebuild
+  // All the child that come under widget() can access the value of ClassObject()
+
+
+  # https://stackoverflow.com/questions/57335980/changenotifierprovider-vs-changenotifierprovider-value#:~:text=Use%20ValueNotifier%20if%20you%20need,when%20notifyListeners()%20is%20called.&text=Is%20an%20important%20difference%20between%20ChangeNotifierProvider.&text=pick%20us%20up.-,In%20a%20single%20list%20or%20grid%20item,should%20use%20Provider%20dot%20value.
+ 
+DO use ChangeNotifierProvider.value to provider an existing ChangeNotifier:
+
+ChangeNotifierProvider.value(
+  value: variable,
+  child: ...
+)
+
+DON'T reuse an existing ChangeNotifier using the default constructor.
+
+ChangeNotifierProvider(
+  builder: (_) => variable,   
+  child: ... 
+)
+
+Here we use a newly created Object instead
+
+ChangeNotifierProvider(
+  builder: (_) => ClassObject(),   
+  child: ... 
+)
+  
+## Use ChangeNotifier.value in List/Grids etc. and ChangeNotifier everywhere else
+# Because in create we assume that you will create the value from Default constructor
+  So when the widget goes out of screen it is released from memory and so its Provider will also be released
+  Since we think it is the deafault constructor and can be created on demand Again
+
+  But the value one does not do any of this and remains here till the end,so we don't get data loss
+
+============================================================================================================
+
+What is ChangeNotifier?
+A class that extends ChangeNotifier can call notifyListeners() any time data in that class has been updated and you want to let a listener know about that update. This is often done in a view model to notify the UI to rebuild the layout based on the new data.
+
+Here is an example:
+
+class MyChangeNotifier extends ChangeNotifier {
+  int _counter = 0;
+  int get counter => _counter;
+
+  void increment() {
+    _counter++;
+    notifyListeners();
+  }
+}
+
+What is ChangeNotifierProvider?
+ChangeNotifierProvider is one of many types of providers in the Provider package. If you already have a ChangeNotifier class (like the one above), then you can use ChangeNotifierProvider to provide it to the place you need it in the UI layout.
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<MyChangeNotifier>(        // define it
+      create: (context) => MyChangeNotifier(),              // create it
+      child: MaterialApp(
+        ...
+
+          child: Consumer<MyChangeNotifier>(                // get it
+            builder: (context, myChangeNotifier, child) {
+              ...
+                  myChangeNotifier.increment();             // use it
+Note in particular that a new instance of the MyChangeNotifier class was created in this line:
+
+create: (context) => MyChangeNotifier(),
+This is done one time when the widget is first built, and not on subsequent rebuilds.
+
+What is ChangeNotifierProvider.value for then?
+Use ChangeNotifierProvider.value if you have already created an instance of the ChangeNotifier class. This type of situation might happen if you had initialized your ChangeNotifier class in the initState() method of your StatefulWidget's State class.
+
+In that case, you wouldn't want to create a whole new instance of your ChangeNotifier because you would be wasting any initialization work that you had already done. Using the ChangeNotifierProvider.value constructor allows you to provide your pre-created ChangeNotifier value.
+
+class _MyWidgeState extends State<MyWidge> {
+
+  MyChangeNotifier myChangeNotifier;
+
+  @override
+  void initState() {
+    myChangeNotifier = MyChangeNotifier();
+    myChangeNotifier.doSomeInitializationWork();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<MyChangeNotifier>.value(
+      value: myChangeNotifier,                           // <-- important part
+      child: ... 
+Take special note that there isn't a create parameter here, but a value parameter. That's where you pass in your ChangeNotifier class instance. Again, don't try to create a new instance there.
+
+You can also find the usage of ChangeNotifierProvider and ChangeNotifierProvider.value described in the official docs: https://pub.dev/packages/provider#exposing-a-value
+
+#If you want to pass variables to your ChangeNotifier, consider using ChangeNotifierProxyProvider.
+
+say you have two provider : bigProvider and smallProvider
+bigProvider somewhere along the parent widget and smallProvider as the child
+Now suppose bigProvider has a value that smallProvider needs, what will you do then ?
+
+simple 
+
+ChangeNotifierProvider(
+  create: (context) {
+    return SmallProvider(
+      someParameter: Provider.of<BigProvider>(context, listen: false),
+    );
+  },
+  child: ...
+)
+
+cool, and will work as expected unless BigProvider's notifyListeners is called
+when that happens smallProvider will lose all data essentially it will be reset
+
+eg: BigProvider provides us with the loggedIn User Score and SmallProvider keeps track of local Score
+Just because user changes doesn't means you remove the local score as well
+
+So whenever we need a value from one provider into another then we use ChangeNotifierProxyProvider
+
+ChangeNotifierProxyProvider<BigProvider, SmallProvider>(
+  create: (_) => SmallProvider(),
+  update: (_, bigProvider, oldSmallProvider) => smallProvider
+    ..update(bigProvider.user),
+  child: ...
+);
+
+see, here we make the value we need not as a parameter but a setter
+during initialization create() is called, and when bigProvider updates the update method is called
+we get the on going value of smallProvider and the new bigProvider
+we then provide the new values to smallProvider that is now passed to all its listeners

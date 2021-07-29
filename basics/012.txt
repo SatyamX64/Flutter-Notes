@@ -1,0 +1,55 @@
+# Consumer
+
+This lets us rebuild only a specific part of Screen rather than the complete page 
+
+SomeWidget extends StatelessWidget {
+    
+    @override
+    Widget build(BuildContext context){
+        // By default due to myClassObject SomeWidget has started listening to ClassObject Provider
+        // So if notifyListeners is called this will rebuild too
+        final myClassObject = Provider.of<ClassObject>(context);
+        return Page();
+    }
+}
+
+// But what if all SomeWidget wanted was the user_id, which say in our app will remain constant unless user logs out
+// We don't want this widget to rebuild when user updates his balance, since this won't change a thing about his id or this widget
+
+// so we don't listen to it at all
+
+SomeWidget extends StatelessWidget {
+    
+    @override
+    Widget build(BuildContext context){
+        final myClassObject = Provider.of<ClassObject>(context,listen:false);
+        return Page();
+    }
+}
+
+// But now what if we had a small text below that shows the balance of user. If we don't listen it won't update as well
+// So, we use listen for this change only where needed using Consumer
+
+SomeWidget extends StatelessWidget {
+    
+    @override
+    Widget build(BuildContext context){
+        final myClassObject = Provider.of<ClassObject>(context,listen:false);
+        return Column(
+            children : [
+                restOfPage(),
+                Consumer<ClassObject>(
+                    builder: (ctx,ClassObject classObject,child){
+                        return BalanceShowingWidget();
+                    }
+                ),
+            ]
+        );
+    }
+}
+
+// So, now only this BalanceShowingWidget() is rebuild on a statechange
+
+
+// That child in builder is for things we know don't change in BalanceShowingWidget despite balance update.
+   So we can make those widgets only once, and then use them in BalanceShowingWidget

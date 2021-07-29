@@ -1,0 +1,15 @@
+stream.someOperator().listens(---)
+
+These are some possible operators : 
+
+.expands : takes a higher order function that recieve data from original stream and emits some new data collection based on that
+.map : higher order function that mutates a emitted value and returns it
+.skip(n) : skips the first n emits
+.skipWhile() : skips as long the condition in higher order function is true
+.take(n) : only emits the first n emits, basically opposite of skip
+.takeWhile() : emits as long as condition holds true
+.where() : emits only if condition matches
+.distinct() : only emits an element once [ so if we had 1,2,3,2,4,4,1 we will get 1,2,3,4]
+
+
+Ofcourse, we can chain all these operations together

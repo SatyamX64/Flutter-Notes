@@ -1,0 +1,28 @@
+Future<int> fun() async {
+  await Future.delayed(Duration(seconds: 3));
+  return 25;
+}
+
+// void main() {
+//   Future<int> res = fun();
+//   res.then((value) => print(value));
+//   print("Hello world");
+// }
+
+/* This results in
+ * Hello world
+ * (3 sec wait)
+ * 25
+ */
+
+// void main() async {
+//   int res = await fun();
+//   print(res);
+//   print("Hello world");
+// }
+
+/* This results in
+ * (3 sec wait)
+ * 25
+ * Hello world
+ */

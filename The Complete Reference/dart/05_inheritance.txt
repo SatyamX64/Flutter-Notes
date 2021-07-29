@@ -1,0 +1,207 @@
+>> Virtual function, are those which can be redefined in a sub class
+   All dart functions are virutal by default
+
+
+>> 
+    class A {
+        double test(double a) => a * 0.5;
+    }
+    class B extends A {
+        @override
+        double test(double a) => a * 1.5;
+    }
+
+    void main() {
+        A obj1 = A();
+        A obj2 = B(); // Upcast - ALLOWED
+        B obj3 = obj1; // Downcast - ERROR 
+        print("${obj1.test(1)}"); // Prints 0.5
+        print("${obj2.test(1)}"); // Prints 1.5
+    }
+
+>> In dart you cannot block inheritance for a class, i.e Every class can be derieved from
+
+>> Covarinats 
+===================================
+Used when you want to change the data type to a subtype (eg num to int, double or vice versa) of super class members 
+
+This will show error : 
+
+    abstract class Fruit {}
+    class Apple extends Fruit {}
+    class Grape extends Fruit {}
+    class Banana extends Fruit {}
+    abstract class Mammal {
+        void eat(Fruit f);
+    }
+    class Human extends Mammal {
+        // Ok
+        void eat(Fruit f) => print("Fruit");
+    }
+    class Monkey extends Mammal {
+        // Error
+        void eat(Banana f) => print("Banana");
+    }
+
+This won't :
+
+    class Monkey extends Mammal {
+        void eat(covariant Banana f) => print("Banana");
+    }
+
+Usually the superclass method is the best place where you could use
+covariant because it removes the "subtype constrain" along the entire hierarchy.
+
+eg : 
+    abstract class Mammal {
+        void eat(covariant Fruit f); // Now Mammal Subclasses will be able to use Fruit/Banana/ other related types as param
+    }
+
+
+>> Every subclass in Dart automatically tries to call the default constructor of the superclass. If
+there isn’t one, you must call the superclass constructor manually in the initializer list.
+    class Example {
+        int a;
+        Example(this.a);
+    }
+    class SubExample extends Example {
+        int b;
+        // If you don't call 'super(b)' the compilation will fail
+        // because the father class has NO default constructor
+        SubExample(this.b) : super(b);
+    }
+
+
+Not needed when super class has default constructor
+class Example {
+    int a = 0;
+}
+class SubExample extends Example {
+    int b;
+    // No need to call super
+    SubExample(this.b); 
+}
+
+
+>> super() constructor always goes last in initializer list
+
+>> Extends vs implements
+
+• When you use class B extends A {} you are NOT forced to override every method of
+class A. Inheritance takes place and you can override as many methods as you want.
+• When you use class B implements A {} you must override every method of class A.
+Inheritance does NOT take place because methods just provide an API, a "skeleton" that
+the subclass must concretize.
+
+In practical terms instead:
+• extends. This is the typical OOP inheritance that can be used when you want to add some
+missing features in a subclass. In chapter 8 we will see that it’s a good practice deriving
+only abstract classes and not concrete classes.
+• implements. Interfaces are useful when you don’t want to provide an implementation of
+the functions but just the API. It’s like if the interface was wall socket and the class was
+the plug that adapts to the holes.
+
+While multiple inheritance is not allowed, you can extends a class and implements more than
+one.
+
+>> Note that your class must have no constructors declared in order to be used as
+mixin
+
+>> Here we restrict mixin to be only used with classes inherting from certain type
+
+    mixin Coding on Human { // Mixin can only be used by subclass of Human
+        void code() {}
+    }
+
+>> A mixin makes methods reusable without having to rely on inheritance.
+
+>> They are same 
+
+    abstract class EncryptionAlgo {
+        // 'AESEncryption' is the default encryption algorithm
+        factory EncryptionAlgo() {
+            return AESEncryption();
+        }
+        void decrypt(String filePath);
+    }
+
+    class AESEncryption extends EncryptionAlgo { ... }
+
+    // 'encrypt' is actually 'AESEncryption' because you're calling the
+    // factory constructor
+    final encrypt = EncryptionAlgo(); // We are not creating a instance of EncryptionAlgo(), just using the factory
+    // since it's abstract, a instance was impossible to begin with
+
+
+    // Just a shorthand way to do the same
+    abstract class EncryptionAlgo {
+        factory EncryptionAlgo() = AESEncryption;
+        void decrypt(String filePath);
+    }
+
+
+>> extensions
+    
+    they are used to add additional features, from outside the class 
+    eg : when you want .captilizeFirstLettter() into the String class of dart
+    now obviously, you can change the dart source code file, but that is blasphemy
+
+    eg : 
+        extension FractionExt on String {
+            bool isFraction() => ...
+            // Converts a string into a fraction
+            Fraction toFraction() => Fraction.fromString(this);
+        }
+    
+    goes without saying, we can use extensions on other classes too (outside of dart source code)
+
+
+>> Every class in dart inherits from Object class
+
+So it has methods like toString(), == , hashcode etc already
+we need to override them generally to make them more meaningful for use
+
+== by default returns true, only if both object reference to same location
+
+
+>> == override
+
+class Example {
+    int a;
+    Example(this.a);
+    @override
+    bool operator ==(Object other) {
+        // 1.
+        if (identical(this, other))
+        return true;
+        // 2.
+        if (other is Example) {
+            final example = other;
+            // 3.
+            return runtimeType == example.runtimeType &&
+            a == example.a;
+        } else {
+            return false;
+        }
+    }
+    // 4.
+    @override
+    int get hashCode => a.hashCode;
+}
+
+identical checks if they reference the same location or not
+.runtimeType gives back runtimeType
+
+IMP: We need to override the hashcode method if we are overriding == (reason pg127)
+
+
+>> implementing >, < (less than), <=, >= can be for class together by
+    1. implements Comparable<Fraction> 
+    2. @override
+        int compareTo(Fraction other) {
+            if (toDouble() < other.toDouble()) return -1; // -1,1 is just convention. We can return any positive/negative number
+            if (toDouble() > other.toDouble()) return 1;
+            return 0;
+        } 
+
+

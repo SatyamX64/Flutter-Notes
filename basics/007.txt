@@ -1,0 +1,15 @@
+Stateless                        Stateful
+=========================================
+InputData                      Input Data
+-------------              --------------
+Widget                             Widget
+                           Internal State
+-------------              --------------
+Renders UI                     Renders UI
+
+
+// when InputData changes both the Widgets are re-render
+// These InputData are the final properties that we pass to widgets, both stateless and Statefu
+
+// When we call setState only the Internal State is re-render again
+// i.e build method is called again

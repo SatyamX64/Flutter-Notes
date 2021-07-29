@@ -1,0 +1,52 @@
+# If compiler can infer the value, use var
+    eg  : var age = 25; // Will make age int type
+          final age = 25; // same
+          int data = map['onion'] // Makes it readable and we can see type errors easily
+          dynamic json = apiCall(); // Since the data coming back might vary
+# don't add type in final since it automatically infers it regardless. Makes it more readable
+
+## In case of a string longer than a single line, avoid the + operator and prefer a simple line break.
+It’s just something recommended by the Dart for styling reasons, there are no performance
+implications at all. Try to be as consistent as possible with the language guidelines!
+
+// Ok
+var s = 'I am going to the'
+'second line';
+// Still ok but '+' can be omitted
+var s = 'I am going to the' +
+'second line';
+// use """   """ for multiline strings, like SQL Commands
+
+##
+. It’s always a good practice checking whether the cast is doable before doing it:
+if (grapes is Fruit) {
+(grapes as Fruit).color = "Green";
+}
+Now you’re guaranteed the cast will happen only if it’s possible and no runtime exceptions can
+happen.
+
+## The point is that you have to keep expressions short and easy to read. Break
+down long conditions into smaller pieces and give the variables good names to better
+understand what you want to check.
+
+## Use .toList to convert iterables to List rather than List.from(iterable)
+    Since the data is no more guaranteed to be of same type and quite possibly a new list is created
+
+## Use = instead of : for Parameters passing
+
+## When a variable has to be both public and read-only, just mark it as final without associating a getter to it
+   Avoid wrapping public variables with getters and setters if there’s no validation logic.
+
+
+## final example = List<int>(); // Bad
+   final example = <int>[]; // Good
+
+##
+late final double a = takesLongTime();
+// Late uses lazy initialization
+// So the function takesLongTime() will only be called when a is accessed
+
+Try to not use the late keyword because it could lead to hard maintenance (you’d have
+to manually keep an eye on the initialization of variables). Whenever possible, initialize
+variables as soon as they are declared.
+(Only use when necessary)

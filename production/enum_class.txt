@@ -1,0 +1,5 @@
+enum_class is a concept used by the built_value package
+
+basically we cannot use enum for complex use cases
+
+    eg : Suppose there is a gate that only 

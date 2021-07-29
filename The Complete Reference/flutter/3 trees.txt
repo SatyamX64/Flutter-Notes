@@ -1,0 +1,42 @@
+Flutter has 3 Layers : 
+    framework   (written in dart) :       
+        -> We interact with this and write almost all our code here
+   
+    engine  (written in C/C++) :
+        -> isolates, runtime settings, platform channels etc 
+    
+    embedder (written in C/C++/Java/Objective C depending on platform) : 
+        -> get entrypoint from OS, start flutter engine and directly talk with OS
+
+
+
+
+Flutter has 3 Trees : 
+    Widget Tree 
+    Element Tree    
+    Render Tree
+
+
+Each widget is an Element 
+    We have 2 classes deriving from Element 
+        RenderObjectElement
+        ComponentElement 
+
+    Widgets that are actually printed on screen are derived from RenderObjectElement (eg : DecoratedBox, Text, Image etc)
+    Widgets that hold other widgets are derived from ComponentElement (eg : Stack, Container, Column etc)
+
+
+    Once we write our widget tree, and build the app , all the 3 trees are created 
+
+       Widget Tree              Element Tree                              Render Tree
+
+        Container               ComponentElement                        RenderDecoratedBox
+            |                           |                                      |
+        DecoratedBox            RenderObjectElement                     RenderParagraph
+            |                           |                        
+        SomeText                ComponentElement                        
+            |                           |                         
+        RichText                RenderObjectElement               
+
+    // Only when new RenderObjectElement comes in the Element tree, the render tree is recreated 
+       Usually we aim to reduce receating the render tree, we update values most of  the time 

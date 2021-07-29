@@ -1,0 +1,148 @@
+// Navigators - part II
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      // '/' is home byDefault
+      // we can also set the initialRoute
+      routes: {
+        MyHome.routeName: (context) => MyHome(),
+        OtherWidgetI.routeName: (context) => OtherWidgetI(),
+        OtherWidgetIII.routeName: (context) => OtherWidgetIII(),
+      },
+      // onGenerateRoute: (settings){         // Can be used to build more custom route patterns
+      //                                      // Called after routes is checked
+      // // if (settings.name == '/II') {
+      //   return ...;
+      // } else if (settings.name == '/III') {
+      //   return ...;
+      // }
+      // return MaterialPageRoute(builder: (ctx) => Home(),);
+      // // we can use custom PageRoute effects too
+      // },
+      // onUnknownRoute: (settings){         // Called after all other measure fail
+      // return MaterialPageRoute(
+      //    builder: (ctx) => 404Screen(),
+      //  );
+      // },                                  // We typically Store a 404 error page here or go back to HomePage
+    );
+  }
+}
+
+class MyHome extends StatelessWidget {
+  static const routeName = '/';
+  const MyHome({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 1'),
+          onPressed: () {
+            Navigator.pushNamed(context, OtherWidgetI.routeName);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetI extends StatelessWidget {
+  static const routeName = '/I';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 2'),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (ctx) => OtherWidgetII('Data from Widget I')));
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetII extends StatelessWidget {
+  final String arg;
+  static const routeName = '/II';
+  OtherWidgetII(this.arg);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 3 + arg:$arg'),
+          onPressed: () {
+            // Since we can pass only one argument here
+            // We rely on maps, to send lots of data at once
+            Navigator.pushNamed(context, OtherWidgetIII.routeName,
+                arguments: {'dataIsent': 'Data from Widget II'});
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetIII extends StatefulWidget {
+  static const routeName = '/III';
+
+  @override
+  _OtherWidgetIIIState createState() => _OtherWidgetIIIState();
+}
+
+class _OtherWidgetIIIState extends State<OtherWidgetIII> {
+  String arg;
+
+  bool _loadedInitData =
+      false; // Just so that we don't look for arguments on every dependency change
+  @override
+  void initState() {
+    super.initState();
+    // 1.
+    // Will throw error if used here, because the widget is not completely initialized at this stage
+    // arg = ModalRoute.of(context).settings.arguments as String;
+  }
+
+  @override
+  void didChangeDependencies() {
+    //3. This is the middleground
+    if (!_loadedInitData) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, String>;
+      arg = routeArgs['dataIsent'];
+      _loadedInitData = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 2.
+    // We can use this here as well, will work just fine
+    // But you might not want to look for arguments in every build call, so we use a middleground
+    // arg = ModalRoute.of(context).settings.arguments as String;
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Home + arg : $arg'),
+          onPressed: () {
+            Navigator.pushNamed(context, MyHome.routeName);
+          },
+        ),
+      ),
+    );
+  }
+}

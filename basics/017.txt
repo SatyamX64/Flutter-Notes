@@ -1,0 +1,51 @@
+Custom Exception
+
+Now in certain cases you might come across situations where you wish to throw the Exception explicitly
+Dart recommends us to not use the exception class directly since it is just a abstract class
+We have to implement our own exception 
+
+# What is difference b/w implement,with,extends
+>extends is when we assign another class as a parent. 
+ We get all the features of parent class and we can override same members or add new ones
+>with is used to add mixins to a class
+>"implements" is generally used when we make our own custom class based on a abstract class.
+ We then have to define all the functions and members defined in the abstract class
+
+
+// Every class in FLutter basically extends object {object is like the base class of all object}
+   So every class also has a toString() method as a result
+
+So class HttpException implement Exception {
+    final String message;
+    HttpException(this.message);
+    
+    @override
+    String toString(){
+        // super.toString();
+        return message;
+    }
+}
+
+# throw is like return, it cancels the function execution ahead
+# .of(context) properties might not work sometimes in async calls so try to keep them out
+
+#video 10.18
+
+# One generally used pattern is in your Network related calls implement the http request and throw exceptions if anything fails there
+  In the UI block, where you called that function, use try/catch
+  This way we will be able to display snackBar , dialogs etc. since they are generally available in UI screen only
+
+
+  We can filter out different error as well
+  eg: 
+
+  try{
+      response = http.post();
+      if(response.body['error'] == true){
+          throw HttpException('Error which will give response 200 but are error');
+      }
+  }on HttpException catch(error){
+      // will run when HttpException was there
+  }catch(error){
+      // will work in other errors
+  }

@@ -1,0 +1,26 @@
+// {} basically implies that the Parameters are optional 
+// i.e User may not decide to pass values
+// In this case the parameter will assume a null value
+// but a normal variable can't hold null, therefore this is invalid
+
+void foo({int a,int b}){
+  print("a is $a, b is $b");
+  return ;
+}
+
+// To solve this
+1. Either we void foo({int? a,int? b})
+   // This tells that a,b can assume nullable values
+
+2. or we void foo({required a, required b})
+   // Now we will have to pass these optional Parameters
+
+// We also have []
+// This implies optional parameter
+// We can only use nullable types and we cannot use the "required"
+// basically function accepts a list of n parameter, we can pass 0-n parameter
+
+    // void foo([int a, int b, int c=56])
+    // We can even pass default values here
+    // foo(2,3);
+

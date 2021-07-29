@@ -1,0 +1,7 @@
+BlocListener<BlocA, StateA>(
+    listener: (context, state) {
+    // listen to state changes and do something,
+    // like showing a snackbar or a dialog
+    }
+    child: const SubWidget(),
+)

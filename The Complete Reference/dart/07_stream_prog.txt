@@ -1,0 +1,166 @@
+/*
+import 'dart:math';
+import 'dart:io';
+
+Iterable<int> randomNumbers() sync* {
+  final random = Random();
+  for (var i = 0; i < 10; ++i) {
+    sleep(Duration(seconds: 1));
+    yield random.nextInt(50) + 1;
+  }
+}
+
+void main(){
+  print('Values print after every one second time difference');
+
+  for(var val in randomNumbers()){
+    print(val);
+  }
+}
+
+ */
+
+/*
+import 'dart:math';
+import 'dart:io';
+
+Stream<int> randomNumbers() async* {
+  final random = Random();
+  for (var i = 0; i < 10; ++i) {
+    sleep(Duration(seconds: 1));
+    yield random.nextInt(50) + 1;
+  }
+}
+
+void main(){
+  print('Values print after every one second time difference');
+
+  randomNumbers().listen((event) { 
+    print(event);
+  });
+
+  or we can use the following for async
+
+  await for (var val in randomNumbers){
+    print(val);
+  }
+
+  print('This prints just fine, because stream is skipped since it was future');
+}
+
+ */
+
+/*
+ We can used named constructors
+ var randomNumbers = Stream<int>.periodic(Duration(seconds: 1),(count) => Random().nextInt(100));
+
+randomNumbers.listen(...)
+ */
+
+/*
+import 'dart:math';
+
+Stream<int> numberGenerator(bool even) async* {
+  if (even) {
+    yield 0;
+    yield* evenNumbersUpToTen();
+    yield 0;
+  } else {
+    yield -1;
+    yield* oddNumbersUpToTen();
+    yield -1;
+  }
+}
+
+Stream<int> evenNumbersUpToTen() async* {
+  for (var i = 0; i < 10; i++) {
+    await Future.delayed(Duration(seconds: 1));
+    if (i % 2 == 0) {
+      yield i;
+    }
+  }
+}
+
+Stream<int> oddNumbersUpToTen() async* {
+  for (var i = 0; i < 10; i++) {
+    await Future.delayed(Duration(seconds: 1));
+    if (i % 2 != 0) {
+      yield i;
+    }
+  }
+}
+
+var randomNumbers = Stream<int>.periodic(
+    Duration(seconds: 1), (count) => Random().nextInt(100));
+
+Future<void> main() async {
+  print('Split Streams');
+
+  await for (var val in numberGenerator(true)) {
+    print(val);
+  }
+}
+
+ */
+
+/*
+/// Using Stream Controller
+
+/// Exposes a stream that continuously generates random numbers
+class RandomStream {
+    /// The maximum random number to be generated
+    final int maxValue;
+    static final _random = Random();
+    Timer? _timer;
+    late int _currentCount;
+    late StreamController<int> _controller;
+    /// Handles a stream that continuously generates random numbers. Use
+    /// [maxValue] to set the maximum random value to be generated.
+    RandomStream({this.maxValue = 100}) {
+        _currentCount = 0;
+        _controller = StreamController<int>(
+            onListen: _startStream,
+            onResume: _startStream,
+            onPause: _stopTimer,
+            onCancel: _stopTimer
+        );
+
+        // Timer.Periodic() // will be wrong, since stream will start emitting as soon as it is made, even when no one is listening     
+        // So we don't call it in constructor
+    }
+    /// A reference to the random number stream
+    Stream<int> get stream => _controller.stream;
+    
+    void _startStream() {
+        _timer = Timer.periodic(const Duration(seconds: 1), _runStream);
+        _currentCount = 0;
+    }
+    void _stopTimer() {
+        _timer?.cancel();
+        _controller.close();
+    }
+
+    void _runStream(Timer timer) {
+        _currentCount++;
+        _controller.add(_random.nextInt(maxValue));
+        if (_currentCount == maxValue) {
+            _stopTimer();
+        }
+    }
+
+}
+
+void main() async {
+    final stream = RandomStream().stream;
+    await Future.delayed(const Duration(seconds: 2));
+    
+    // The timer inside our 'RandomStream' is started
+    final subscription = stream.listen((int random) {
+        print(random);
+    });
+    
+    await Future.delayed(const Duration(milliseconds: 3200));
+    subscription.cancel();
+}
+
+ */

@@ -1,0 +1,20 @@
+## Folder Structure for lib
+
+    - routes/
+    - localizations/
+    - widgets/
+    - models/
+        * blocs/
+        * providers/
+        * repositories/
+        * ...
+    - main.dart
+    - routes.dart
+
+## Folder Structure for test
+
+    - unit/
+    - widget/
+    - integration/
+
+

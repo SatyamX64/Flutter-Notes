@@ -1,0 +1,85 @@
+# Spread operator
+-----------------------------------------
+  var list = [0,1,2];
+  var list2 = [-2,3, ...?list];
+
+
+# 
+final numbers = [
+    0, 1, 2,
+    for(var i = 3; i < 100; ++i) i
+];
+
+
+# list has factory constructor like unmodifiable, filled, generate
+
+    final example = List<int>.filled(5, 1, growable: true);
+    // Now example has this content: [1, 1, 1, 1, 1]
+
+    unmodifiable() It returns a copy of the given list in which you cannot call add, remove
+    or other methods that would modify its content.
+    var example = List<int>.unmodifiable([1,2,3]);
+    example.add(4); // Runtime error
+
+
+
+# unmodifiable {list/map} creates a new copy of list
+  unmodifiable {listview/mapview} just holds a reference 
+
+# there are 3 types of map implementation
+    LinkedHashMap (default) : Holds the order in which they were added
+    HashMap : class hash-table implementation, no order retained, can even have null as key
+    SplayTreeMap : implements BST, so keeps the key sorted. We can pass the comparator, or it will use class default
+
+#   final example = List<int>(); // Bad
+    final example = <int>[]; // Good
+
+# It is important that hashcode remains unique whenever we override == , since only then we will be guaranteed constant lookup times
+    class Test {
+        final int a;
+        final int b;
+        final String c;
+        Test(this.a, this.b, this.c);
+        bool operator==(Object other) {...}
+        int get hashCode {
+            const prime = 31;
+            var result = 1;
+            result = prime * result + a.hashCode;
+            result = prime * result + b.hashCode;
+            return prime * result + c.hashCode;
+        }
+    }
+
+##  In general, it’s a good practice taking every instance variable of the class and perform a
+    series of multiplications with prime numbers, 
+    In this way, every time you create an instance
+    of the same object, such as Test(0, 1, "a"); you'll always get the same hash code
+
+    Since, we will get a lot of boilerplate, once we get many variables
+    therfore, we have a package to do this for us called equatable
+    (It has mixins/abstract class which we can use as needed)
+
+IMP : If your class is NOT immutable, because not every instance field is final, do
+NOT override operator== and hashCode. Overriding hashCode with a mutable object could break hash-based collections.
+This is also written in the official Dart design guidelines 
+
+## intermediate functions :     
+    – where(): goes through the entire list and discards elements that evaluate the condition to false.
+    – map(): transforms the element from a type to another.
+    – skip(): skips the first n elements of the source collection.
+    – followedBy(): concatenates this container with another one, passed as parameter.
+
+## terminals : 
+    – toList()/toSet()/toMap(): gathers the elaborated data through the "pipes" and
+    returns an instance of a list/set/map.
+    – every(): returns a boolean indicating if every element of the collection satisfies the
+    given condition.
+    – contains(): returns true or false whether the collection contains or not the object
+    you’re looking for.
+
+## reduce : reduces list element into one
+   final sum = list.reduce((int a, int b) => a + b);
+    You cannot use reduce() on empty collections.
+
+## fold : similar, but takes a initialValue and return type can be different from list
+   final sum = list.fold(0, (int a, int b) => a + b);

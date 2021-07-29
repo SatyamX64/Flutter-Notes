@@ -1,0 +1,96 @@
+// Animation and Tween
+
+// // import 'package:flutter/material.dart';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData.dark(),
+//       home: OtherWidgetI(),
+//     );
+//   }
+// }
+
+// class OtherWidgetI extends StatefulWidget {
+//   @override
+//   _OtherWidgetIState createState() => _OtherWidgetIState();
+// }
+
+// class _OtherWidgetIState extends State<OtherWidgetI>
+//     with SingleTickerProviderStateMixin {
+// // Animation are like different configuration or ways we wish to use the _controller in
+//   AnimationController _controller;
+//   An 
+//   Animation _colorAnimation;
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller =
+//         AnimationController(vsync: this, duration: Duration(seconds: 2));
+
+//     _controller.addListener(() {
+//       print(_controller.value);
+//       setState(() {});
+//     });
+//     _controller.addStatusListener((status) {
+//       if (status == AnimationStatus.completed) {
+//         print('Yes it works as well !!');
+//       }
+//     });
+
+//     _animation = CurvedAnimation(parent: _controller, curve: Curves.bounceIn);
+// 
+//    // This is like the Standard Animation
+// 
+//     _animation.addStatusListener((status) {
+//       // This creates a looping behaviour
+//       if (status == AnimationStatus.completed) {
+//         _controller.reverse();
+//       } else if (status == AnimationStatus.dismissed) {
+//         _controller.forward();
+//       }
+//     });
+
+//     // Tween means be(tween) two values
+//     // Sp given a controller it goes between the give values progressively
+//     // There are different kind of tweens like color, rectangularBorderTween etc.
+//     _colorAnimation =
+//         ColorTween(begin: Colors.red, end: Colors.amber).animate(_controller);
+
+//     _animation.addStatusListener((status) {
+//       // This creates a looping behaviour
+//       if (status == AnimationStatus.completed) {
+//         _controller.reverse();
+//       } else if (status == AnimationStatus.dismissed) {
+//         _controller.forward();
+//       }
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         backgroundColor: _colorAnimation.value,
+//         body: Center(
+//           child: Text(
+//               'Animation Value is :  ${_animation.value.toStringAsPrecision(2)}'),
+//         ),
+//         floatingActionButton: FloatingActionButton(
+//           onPressed: () {
+//             _controller.forward();
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -1,0 +1,55 @@
+Flutter has the optional key parameter.
+Very simply, it’s used to uniquely identify a widget in the tree,
+
+>> There are 4 type of keys :
+
+    - ValueKey<T> : use it when you are sure that you're making it with unique data 
+
+            eg : final itemKey = ValueKey<String>("item-id-0025");
+                // and then on the build method...
+                Text(
+                    itemText,
+                    key: itemKey,
+                )
+
+    - ObjectKey<T> : When you’re not guaranteed that a single field is unique but a combination of multiple
+                     values is, go for an ObjectKey.
+
+            eg: final list = [
+                    Task(
+                    owner: const OwnerData(...),
+                    date: "...",
+                    duration: const Duration(...),
+                    )
+                ]
+            
+            // Suppose you had a listview, where each widget mapped to a list element
+            // Then use can use ObjectKey to generate keys, since we are sure that no Task will have exact same date/owner/duration
+
+    - UniqueKey<T> :  This key is only equal to itself: there’s only one across the entire app.
+                      Use it, when you can't use object or value key
+
+    - GlobalKey<T> : global keys are useful to keep in sync the state of multiple widgets
+
+
+
+>> PageStorageKey
+
+    A PageStorageKey<T> (subclass of ValueKey<T>) is used to remember the scrolling position
+    of a list when the page of a tab is changed
+
+    eg : This retains scroll position
+
+        TabBarView(
+            controller: tabController,
+            children: [
+                ListView.builder(
+                    key: const PageStorageKey<String>(('list1'),
+                    itemBuilder: (context, index) {...},
+                ),
+                ListView.builder(
+                    key: const PageStorageKey<String>(('list2'),
+                    itemBuilder: (context, index) {...},
+                ),
+            ]
+        )

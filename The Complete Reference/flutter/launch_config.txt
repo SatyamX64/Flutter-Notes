@@ -1,0 +1,1 @@
+vscode uses launch.config to determine what file to launch (default : lib/main.dart)

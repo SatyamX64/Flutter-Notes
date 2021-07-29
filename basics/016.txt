@@ -1,0 +1,35 @@
+# How to setup firebase as a generic database
+
+1. Register app on firebase
+2. Add Firebase to FLutter Project
+3. Go to Realtime DataBase in test mode
+   Here you will get the backend-url mentioned earlier
+
+4. Now we can send request to firebase-url/table_name.json
+   If we send post request our json will be added to that table_name
+   table_name here is more of a hash-map kind of thing
+   It stores all the values with a proper server-generated key
+   As a response to the post request we get that key 
+
+5. get
+   Make a get request to the url/table_name.json to get all the data in a json
+
+6. patch : to update the data
+   Make a patch request to url/table_name/id.json
+   http.patch(url,body : {new json})
+
+7. delete : to delete the data
+   Make a delete request to url/table_name/id.json
+   http.delete(url)
+
+
+# Optimistic Updating
+-------------------------
+We send the request for change to server and rather than waiting for it
+We update locally, if no error found Good
+if error do comes we revert back the local changes
+
+#video : 10.17
+
+
+       

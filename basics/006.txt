@@ -1,0 +1,70 @@
+// What is Flutter ? 
+
+
+Flutter is a tool that allows us to builf Native-cross-platform app with one codebase
+Flutter : SDK + Framework
+SDK - Compiles code into Native and also take cares of other technical details
+Framework - It consists of UI Building Blocks, Widgets options, Pacakges, Functions etc.
+
+
+
+                          ------------------  Flutter Framework
+                         |                           | (based on)
+                         |                         Dart {Programming Language}
+                         |
+Flutter -----------------|
+                         |
+                         |
+                          ------------------ Flutter SDK (set of tools to Compile and other stuff)
+
+Widgets : These are like code snippets that have a certain defined use
+          eg: A snippet of code to render a button
+          // More snippets can be based on that, like RaisedButton, FLatbutton etc.
+        i.e Widgets is an immutable description of part of a user Interface
+
+* One Important point to note is that although Flutter Compiles to native code, 
+  it doesn't means that it just simply convert all components into native equivalent
+
+  eg: In Android implementation  say androidButton() is the RaisedButton
+      In Swift implementation say iosButton() is the RaisedButton
+
+      Then Flutter won't convert the code of RaisedButton into androidButton or iosButton
+      rather it will do a custom implementation irrespective of platform, as all screen pixels are controlled by Flutter
+
+# Create Project using CLI
+1. Go to the desired directory
+2. flutter create project_name {has to be single word}
+3. cd project_name
+4. flutter run
+
+
+#Files and their Uses
+
+> .idea - configuration files for Android Studio
+> .vscode - configuration files for vscode
+> android - complete android project which will run of android devices {kind of like a seprate app in itself}
+> ios - complete ios project
+> build - output of flutter application is stored here (output is based on the above 2 folders)
+> lib - contains the source code
+> test - allows to run automated tests
+> .gitignore - to place things not to be tracked by git
+> .metadata - flutter stores some info here
+> .project_name.iml , .pubspec.lock, .packages -- auto generated, stores some info, not important for user
+> pubspec.yaml - to add project files and packages
+
+#Whenever you tap on a textfield, flutter makes the screen shift up by the textfield height
+ This ensures, that textfield is always visible
+
+#PrimaryColor : only changes the PrimaryColor of app
+ PrimarySwatch : makes all the shades in app based on this colors
+
+#To take care of platform specific themes, use adaptive Widgets
+ eg: switch.adaptive()   // will style automatically acc. to platform
+
+#Repaint Rainbow : It is a devTool, it shows what all things are repainted after a particular event, like a buttonTap
+--btw, repainted is not same as recreated
+  repainted means Flutter try to use code from earlier/memory, so not vey resource intensive
+  -- like appBar won't be rebuild in every frame, it is just repainted again and again
+  rebuild is like created from scratch, rarely happens only if big changes occur
+  -- if we come from a page that didn't have a appBar to a page that does have one, 
+     then during first frame appBar will be rebuild

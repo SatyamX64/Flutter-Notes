@@ -1,0 +1,50 @@
+// Inheritance in Action
+
+void main(List<String> arguments) {
+  Car car = Car();
+  ElectricCar electricCar = ElectricCar(50);
+  SuperCar superCar = SuperCar();
+  // car.drive();
+  electricCar.drive();
+  // superCar.drive();
+}
+
+// late means doesn't have initialized value atm, will get after refernce
+
+class Car {
+  late int noOfWheels;
+
+  // This is a constructor
+  Car() {
+    this.noOfWheels = 100;
+  }
+
+  // Member Function
+  void drive() {
+    print('Car goes brrr...');
+    print('The numbrer of wheels are  : $noOfWheels');
+  }
+}
+
+class ElectricCar extends Car {
+  late int noOfWheels; // This will shadow the parent class
+  ElectricCar(int value) {
+    this.noOfWheels = value;
+  }
+
+  @override
+  void drive() {
+    print('This car goes bzzzzz');
+    print('The numbrer of wheels are  : $noOfWheels');
+  }
+}
+
+class SuperCar extends Car {
+  
+  @override
+  void drive() {
+    super.drive();
+    print('But super fast this time');
+    print('The numbrer of wheels are  : $noOfWheels');
+  }
+}

@@ -1,0 +1,7 @@
+This is something we use to run super heavy tasks 
+
+Isolate has their own memory and event loop
+A app generally runs on one isolate unless we explicitly use another isolate
+
+Better read directly from Book
+and official flutter channel

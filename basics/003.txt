@@ -1,0 +1,83 @@
+// Animation basics
+
+// Every Animation needs 3 Basic things :
+// 1. Ticker
+// 2. Animaton Controller
+// 3. Animaton value
+
+// Ticker means a widget that shall rebuilt on each tick
+// Controller kind of manages all that
+// And based on the animation value from Controller we update things on UI
+// All this things together create the illusion called animation
+
+// ###################### A Very Basic Use #############################
+
+// import 'package:flutter/material.dart';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData.dark(),
+//       home: OtherWidgetI(),
+//     );
+//   }
+// }
+
+// class OtherWidgetI extends StatefulWidget {
+//   @override
+//   _OtherWidgetIState createState() => _OtherWidgetIState();
+// }
+
+// class _OtherWidgetIState extends State<OtherWidgetI>
+//     with SingleTickerProviderStateMixin {
+//   
+//   //1. Add the mixin to to make this entire widget state Tickerable 
+//   
+//   //2. We have the controller here waiting to be initialized
+//   AnimationController _controller;
+
+//   @override
+//   void initState() {
+//     super.initState();
+// 
+//     //3. Initialize the Controller
+//     // vsync: this means the entire state is acting as a frame  (or something, not sure)
+//     _controller =
+//         AnimationController(vsync: this, duration: Duration(seconds: 5));
+//     
+//    //4. Not Compulsory, but necessary in a way. Whenever value changes it is called
+//    // we can setState((){}) here to update things in UI, value will change regardless of that though
+//    _controller.addListener(() {
+//       print(_controller.value);
+//       setState((){});
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//           //5. Things will update smoothly
+//           child: Text('Other Widget I ${_controller.value.toStringAsPrecision(2)}'),
+//         ),
+//         floatingActionButton: FloatingActionButton(
+//           onPressed: () {
+//            //6. This is how we can command controller to move ahead, will stop automatically at upper bound
+//             _controller.forward();
+//           },
+//         ),
+//       ),
+//     );
+//   }
+//
+//  @override
+//   void dispose() {
+//     //7. don't forget to dispose the controlle off
+//     _controller.dispose();
+//     super.dispose();
+//   }
+// }

@@ -1,0 +1,46 @@
+Pg.251
+dart:ffi library, also known as Foreign Function Interface,
+Dart code can directly bind to native APIs written in C. FFI is very fast because there’s no serialization
+required to pass data since calls are made to dynamically or statically linked libraries
+
+eg : // assuming all files are in same dir for simplicity
+
+// demo.h
+    void print_demo() {};
+
+
+// demo.c
+    #include <stdio.h>
+    #include "demo.h"
+
+    void print_demo() {
+        printf("Dart FFI demo!");
+    }
+
+    int main() {
+        print_demo();
+        return 0;
+    }
+
+
+// main.dart
+
+    import "dart:ffi" as FFI;
+    // Signature of the function in C
+    typedef print_demo_c = FFI.Void Function();
+    // Signature of the function in Dart
+    typedef PrintDemo = void Function()
+
+    void main() {
+        // Open the library
+        final path = "demo_lib.dll"; // On Windows
+        final lib = FFI.DynamicLibrary.open(path);
+
+        // Create a "link" from C to Dart
+        final PrintDemo demo = lib
+            .lookup<FFI.NativeFunction<print_demo_c>>('print_demo')
+            .asFunction();
+
+        // Call the function
+        demo();
+    }

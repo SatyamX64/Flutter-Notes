@@ -1,0 +1,33 @@
+Saving files to local
+-------------------------------
+
+You have a file
+use file.copy(path)
+path is now where that thing will be stored
+Both Android and IOS don't like you writing/reading stuff anywhere for security and privacy reasons
+So they just give every app some space where it can play
+This also helps when you unistall the app, the OS simply clears that space and all the data is gone
+now to get access to that path, you need a package called path_provider
+it provides us with a bunch of options :
+ 1. applicationDocumentsDirectory -- space given by OS to play
+    applicationSupportDirectory -- blabla blabla
+ 2. externalStorage -- android specific, gives access to SD card 
+ 3. temporaryStorage -- this dir is regulary cleaned by OS, so use it only for small time
+    // imagePicker stores the image in temp dir
+
+each file.path gives us --> the route to where it's stored/file_name.extension
+and that's what we have to provide during save as well 
+
+
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqlite_api.dart';
+import 'package:path/path.dart' as path;
+class DBHelper {
+  static Future<void> insert(String table, Map<String,Object> data) async{
+    final dbPath = await sql.getDatabasesPath();
+    final sqlDb = await sql.openDatabase(path.join(dbPath,'places.db'),onCreate: (db,version){
+      return db.execute('write command here');
+    },version: 1);
+    await sqlDb.insert(table, data,conflictAlgorithm: sql.ConflictAlgorithm.replace) ;
+  }
+} 

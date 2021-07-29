@@ -1,0 +1,26 @@
+// Interface 
+
+
+When a class implements another class
+
+Eg: 
+
+class Employee {
+
+    int name;
+    int age;
+    int salary;
+
+    void foo(){
+
+    }
+}
+
+Now lets say a class Manaager implements it
+
+class Manager implements Employee {
+
+   // Now I will have to implement all that was defined in Employee here as well 
+   // super functions are not available here since this is not inheritance technically
+   // Its just a contract that defines some rules I must fulfill
+}

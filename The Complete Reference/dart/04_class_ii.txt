@@ -1,0 +1,76 @@
+>> Every subclass in Dart automatically tries to call the default constructor of the superclass. If
+there isn’t one, you must call the superclass constructor manually in the initializer list.
+    class Example {
+        int a;
+        Example(this.a);
+    }
+    class SubExample extends Example {
+        int b;
+        // If you don't call 'super(b)' the compilation will fail
+        // because the father class has NO default constructor
+        SubExample(this.b) : super(b);
+    }
+
+
+Not needed when super class has default constructor
+class Example {
+    int a = 0;
+}
+class SubExample extends Example {
+    int b;
+    // No need to call super
+    SubExample(this.b); 
+}
+
+
+>> super() constructor always goes last in initializer list
+
+>> A abstract class has methods, getters, setters, variables, that it's children must implement
+>>  A class is concrete (and thus not abstract) when every method has a body. 
+So if you inherit from a abstract class and don't define all methods, than you'll still be abstract
+
+
+>> Interfaces
+
+    abstract class MyInterface {
+        void methodOne();
+        void methodTwo();
+    }
+    class TwoInterface {
+        void two() {}
+    }
+    class Example implements MyInterface {
+        @override
+        void methodOne() {}
+        @override
+        void methodTwo() {}
+    }
+
+    class Example2 implements TwoInterface, MyInterface {
+        @override
+        void methodOne() {}
+        @override
+        void methodTwo() {}
+        @override
+        void two() {}
+    }
+
+The keyword is implements and, differently from a regular subclass, here you must override every method defined by the class/interface.
+The official documentation states the following:
+ Every class implicitly defines an interface containing all the instance members of
+the class and of any interfaces it implements. If you want to create a class A that
+supports class B’s API without inheriting B’s implementation, class A should implement the B interface.
+
+While extends can be used with only one class, implements works with one or more classes,
+# recommended to use abstract class as intefaces, rather than using this way. Because in abstract you won't have to give body to functions.
+  But in this way, you will have to.
+
+In general, use extends if all subclass share some common properties that you don't want to implement again for all
+Use interface when we just need to follow a blueprint, and everthing needs to be different for all (Page 115)
+
+>> Class that don't have a constructor can be used as mixin, although it's preferred that you use mixin keyword, whenever making one 
+
+mixin Coding on Human {      // This enforces that only Human SubClass can use this Mixin
+void code() {}
+}
+

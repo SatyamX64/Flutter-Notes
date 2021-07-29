@@ -1,0 +1,112 @@
+## 
+    Try to keep conditions readable and organized
+
+    So prefer this 
+        final usefulTestName1 = A && B || C && !A;
+        final usefulTestName2 = !(A && C)
+        if (usefulTestName1 || usefulTestName2 || B) { ... }
+    
+    Over this 
+        if ( (A && B || C && !A) || (!(A && C) || B) ) { ... }
+
+    
+##
+
+    Classes must not override ==, if they want to be compared using switch statements
+
+
+##
+    Only works for the loop they were called in
+        continue :  skips to next iteration
+        break : ends the current loop
+
+
+## 
+    assert(boolean expression, "Optional statement"); 
+    // Only works in debug mode, otherwise ignored
+    // throws exception if condition not fulfilled
+
+## 
+    Functions with no return type, return dynamic by default
+    Although it's recommended to try to always specify the return type or use void.
+
+
+## 
+    Since dart is a true OOP language, so even functions are objects
+    with the type being Function!
+
+    So, this works : 
+        // Declare a function
+        bool checkEven(int value) => value % 2 == 0;
+        void main() {
+            // Assign a function to a variable
+            bool Function(int) checker = checkEven;
+            // Use the variable that represents the function
+            print(checker(8)); // true
+        }
+    
+    You can only do this if function signature matches (i.e Exact same return type, and parameters type & order)
+
+    idea:
+    • 28: It’s an integer and its type is int.
+    • "Pizza": It’s a string and its type is String.
+    • bool checkEven(int value) => ...: It’s a function and its type is bool Function(int).
+
+##
+    Anonymous Functions
+        void main() {
+            bool Function(int) isEven = (int value) => value % 2 == 0;
+            print(isEven(19)); //false
+        }
+
+## Dart supports Nested functions, since Functions are just objects 
+
+    void testInner(int value) {
+        // Nested function
+        int randomValue() => Random().nextInt(10);
+        // Using the nested funcion
+        final number = value + randomValue();
+        print("$number");
+    }
+
+
+##
+    int Function(int) myFun;    // This tells me that function will return int and also accept a int as parameter
+
+    myFun = (x){       // This here is an Anonymous function, we can't give a return type. It is auto infered
+        return x*5;
+    }
+
+    int myFun(int x){  // This is just syntactical sugar to some extent
+        return x*5;
+    }
+
+
+## So, as a result we can also use typedefs and pass functions just like any other variable (known as callbacks)
+
+    eg : 
+    void printIntegers(void Function(String msg) logger) {
+        logger("Done.");
+    }
+
+    typedef LoggerFunction = void Function(String msg);
+    void printDoubles(LoggerFunction logger) {
+        logger("Done double.");
+    }
+
+## 
+    void showNumber(int value) {
+        print("$value");
+    }
+    
+    void main() {
+        // List of values
+        final numbers = [2, 4, 6, 8, 10];
+        // Good
+        numbers.forEach(showNumber);
+        // Bad
+        numbers.forEach((int val) { showNumber(val); }); // Anonymous functions are not recommended in forEach
+
+        // forEach(void Function(int));
+    }
+

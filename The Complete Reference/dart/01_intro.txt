@@ -1,0 +1,49 @@
+Dart is a client-optimized, garbage-collected, OOP language 
+
+AOT - Ahead of Time Compiled
+// i.e High Level Language like dart get compiled into native binary (like .apk,.exe,.ipa etc)
+// So it becomes portable and doesn't need a dart VM to run
+// Flutter gives us this AOT support for Dart
+
+AOT compilation is very powerful because it natively brings Dart to mobile desktop. You’ll
+end up having a single native binary which doesn’t require a DVM to be installed on the
+client in order to run the application.
+
+
+## So app is in 2 States 
+1. During developement  
+    JIT (Just in Time) + Dart VM
+    This is a sort of dynamic compilation, and this runs during developement
+    This allows the dispatch of the code dynamically without considering the user’s machine architecture. (beacuse it runs in VM)
+
+    For Web : dartdevc
+
+2. During Release
+    This is where we use the AOT+runtime
+    App get compiled into a native binary, that can be distributed
+
+    For Web : dart2js
+
+• The true power of Flutter lies on the fact that apps are built with their own rendering stuff and
+they are not constrained to paint the UI following the rules "imposed" by OEM widgets. You’re
+free to control the screen and manipulate every single pixel.
+
+So App doesn't paint itself acc. to OEM components, but uses a custom Engine (Skia) to render everything
+This allows us true freedom, to control every pixel on screen
+Other Functionalities like Camera, Bluetooth, Audio, Sensors etc are directly accessed using Native code
+As the required dart code is converted into Native, when we Release App
+
+• A minimal Flutter app is about 4.4 MB on Android and 10.9 MB on iOS (depending on
+the architecture, whether it be ARM 32 or 64 bit)
+
+
+## To build app
+
+$ flutter build appbundle
+$ flutter build ios
+$ flutter build web
+$ flutter build macos
+$ flutter build windows
+$ flutter build linux
+
+

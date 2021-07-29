@@ -1,0 +1,6 @@
+someStream.errorHandlers.listen()
+
+Some error handlers are 
+
+.handleError : runs if stream throws a exception, listen doesn't run if chained below
+.timeout : takes a Duration and throws exception if time b/w yield exceeds that duration

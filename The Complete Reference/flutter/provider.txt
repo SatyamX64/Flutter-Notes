@@ -1,0 +1,117 @@
+We know this doesn't work and throws a runtime error :
+
+class ExamplePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Provider<Something>(
+      create: (context) => Something(),
+      child: Text("${Provider.of<Something>(context).description}"),
+    );
+  }
+}
+
+
+we can solve this using 2 ways :
+
+    1. Adding a extra Layer
+
+        // Widget with provider
+        Provider<Something>(
+          create: (context) => Something(),
+          child: const ChildWidget(),
+        );
+        // Another wiget
+        class ChildWidget extends StatelessWidget {
+          const ChildWidget();
+          @override
+          Widget build(BuildContext context) {
+            final description = Provider.of<Something>(context).description;
+            return Text(description);
+          }
+        }
+
+    2. Use Consumer
+
+        Class ExamplePage extends StatelessWidget {
+            @override
+            Widget build(BuildContext context) {
+                return Provider<Something>(
+                    create: (context) => Something(),
+                    child: Consumer<Something>(
+                        builder: (_, value, __) {
+                            return Text("${value.description}");
+                        }
+                    )
+                );
+            }
+        }
+
+    Both ways are absolutely fine but probably the first one would be better because of the possibility
+    to define a const constructor
+
+
+
+## Selector
+
+    it is kind of like cosumer but provides more powerful and granular controls
+    suppose you're listening to a provider of type person using consumer to show name
+
+    Person {
+        String name;
+        List<String> tasks;
+
+        changeName() {
+            ...
+            notify()
+        }
+
+        changeList(){
+            ...
+            notify()
+        }
+    }
+
+
+    Now you use a Consumer to show person name, but it will also rebuild even when the list changes
+
+    So you can use Selector in this case to only rebuild that particular Listener only if certain property changes
+
+        Selector<PersonData, String>(
+            selector: (context, person) => person.name,
+            builder: (context, name, _) {
+            return Text(name);
+            }
+        ),
+
+
+        you can even add more custom conditions using shouldRebuild
+
+        Selector<PersonData, String>(
+            selector: (context, person) => person.name,
+            shouldRebuild: (previous, next) {
+                return (previous != next) &&
+                (person.age > 18);
+            }
+            builder: (context, name, _) {
+                return Text(name);
+            }
+        ),
+
+
+Use listen: false when a provider is called anywhere outside the build method of a
+widget. It’s actually fact and rather than a good practice because not doing so causes a
+runtime exception!
+
+// Default provider (with listen: true)
+final before = Provider.of<T>(context);
+final after = context.watch<T>();
+// Non-listening provider (with listen: false)
+final before = Provider.of<T>(context, listen: false);
+final after = context.read<T>();
+
+
+// Use listen : false or the context.read() whenever outside of build method
+   Since listen = true implies that widget should rebuild, but since you are not in build method it will lead to runtime error
+
+   
+

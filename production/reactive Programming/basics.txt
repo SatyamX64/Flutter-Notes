@@ -1,0 +1,49 @@
+Anything that uses reactive programming is called rx
+Here the main idea is to work with async events         
+
+    dart : stream<T>
+    RxJs,RxJava,RxDart : Observable<T>
+
+
+.listen : takes a higher order function that runs on every yield
+.onDone : takes a higher order function that runs on end of stream
+.onError : same but when error thrown
+
+await for : syntactic sugar  for waiting for a stream to end 
+    eg : 
+        var sum = 0
+        await for (var number in getNumbers()) {
+            sum += number;
+        }
+        print(num);
+    
+    instead of : 
+        var sum = 0
+        getNUmbers.listen((data){
+            sum += data;
+        });
+        print(sum);
+
+iterable is almost like stream, but results are returned immediately unlike stream
+
+
+.isEmpty() : waits for stream to end, then returns a boolean based on if stream ever yielded anything
+             immediately returns false, as soon as the stream yields anything (since waiting more will be pointless)
+ 
+.first() : returns the first yield values, or error if isEmpty
+.last() : returns last or error
+.length() : waits till stream ends, then return numbers of value iterated
+.single() : returns the value that stream returns. If stream return more/less than 1 we get exception
+.any() : checks if stream yields something that matches our check, goes through each of the stream values. 
+         If some value matches then immediately return true else false on stream end
+.contains() : checks if stream yields a particular value or not, basically a limited any
+              any/contains return a result immediately if condition is matched
+.elementAt() : returns immediately when gets to index, exception if no element is returned at index
+.firstWhere() : returns immediately when condition matches
+.lastWhere() : returns as soon as stream ends 
+.join() :  waits for the stream to end, returns a string with all elements. we can pass a seprator too 
+            eg : print(await getNumbers().join(' ,'))
+
+.singleWhere() : only single should meet condition else exception, so waits for whole stream to end
+
+ 

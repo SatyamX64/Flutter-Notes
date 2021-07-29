@@ -1,0 +1,37 @@
+First of add git to the repo and make first commit : "init Project"
+
+Each commit message of format : [FILE_NAME] {add/fix/update/remove/prepare/refactor or any verb} {what did we change (2-5 words)}
+
+Each commit should be stable and well documented. No quick-fix or temporary commits.
+i.e Anyone else should be able to continue the Project from any previous commit if the need arises
+
+Commit after every small change like :
+    1. added new resources 
+    2. created a new folder, with all the Structure files and placeholders
+    3. Updated the placeholders file
+
+Initial Project Structure 
+
+    presentation
+        custom_ui
+            custom_ui.dart // export all files in this folder here
+            name.dart
+        common_widgets
+            barrel_common_widgets.dart // export all files in this folder here
+        screen  
+            // one folder for each screen
+            home
+                sc_home.dart // sc_screen_name
+                barrel_home.dart // export all the widgets files in this folder here
+                widget_purpose.dart 
+            splash
+                sc_splash.dart
+        app_router.dart
+    utils
+        my_const
+            COLOR_CONST.dart    
+                // class COLOR_CONST with static const color
+            FONT_CONST.dart
+            my_const.dart
+            UI_CONST.dart
+    main.dart

@@ -1,0 +1,74 @@
+# Firebase Setup for Authentication
+
+First thing we should do is lock our database if not done already
+So go to console>database>rules
+
+change this
+{
+    "rules" : {
+        ".read" : true,
+        ".write" : true
+    }
+}
+
+to this
+{
+    "rules" : {
+        ".read" : "auth != null",
+        ".write" : "auth != null"
+    }
+}
+
+// This means that Authenticated users can change all data of all users
+// If you want to define more complex rules, this is the place
+
+# What we do to create user is 
+  http.post('url+apiKey',
+  body : {
+      'email' : 'something',
+      'password' : 'something',
+      'sendRefreshToken' : 'always true'
+  }
+  );
+
+  this will return
+
+  {
+      'expiresIn' : 'seconds left to expire',
+      'refreshToken' : ' can be used to extend expire time',
+      'token' : 'this is what we store'
+  }
+
+
+  Things are pretty similar for login as well, just the url might change a bit
+
+  #Now we just make a auth class and which stores the token
+   and a getter that retrieves it
+
+   Now near the root widget of app, we check if token getter return something then we login else log out
+
+   token getter should also take care of expiryTime and stuff
+
+
+#Video 11.9 is important
+
+# Now suppose all the products have a creatorId in backend and you only want the products for a certain creator 
+
+Then you can : 
+1. get all the products from backend and then sort out the creator's product on frontend <<< will make everything sloww
+2. get only the creator' product directly from server           <<<< goes without saying , do this
+
+In Firebase
+
+url -> url&orderBy="key you wanna match"&equalTo="value to match to"
+
+// it's a firebase thing only btw. won't work on all backends by default
+Needs some per-config as well, discussed in 10.12
+
+#video : 10.15 for auto-logout on token expire
+
+
+
+
+
+  

@@ -1,0 +1,5 @@
+List are not serializable, use BuiltList
+
+BuiltList is derived from List but is unmodifiable and supports serialization
+
+Bug : have to import build_collection maually sometimes in serializer.dart

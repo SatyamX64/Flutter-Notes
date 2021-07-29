@@ -1,0 +1,2 @@
+ctrl + ` : opens inbuilt terminal
+ctrl + shift + c : opens external terminal

@@ -1,0 +1,10 @@
+#Running Native Code
+
+So suppose you need the camera
+Then ideally you will write some java/swift code to open that for you
+Then you will intergrate that code into your Flutter codebase
+
+Now everyone does not know that language so someone did the heavy part for you 
+Now since its integrated you just call the functions you need, without worrying about the implementation
+That are packages in general
+

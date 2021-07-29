@@ -1,0 +1,87 @@
+// Mixins
+// // They are used to re-use a class code in multiple class heirarchy
+// // Like small snippets of code to upgrade a class
+// // Classes are like genes which we get right from birth
+// // eg: black hair
+// // Mixins are like properties and configuration we pick up
+// // eg: Your fashion sense, abiliity to play soccer etc
+
+// /*
+// class Animal {
+//   move() {
+//     print('\nChange Position');
+//   }
+// }
+
+// class Fish extends Animal {
+//   move() {
+//     super.move();
+//     print('By swimming');
+//   }
+// }
+
+// class Bird extends Animal {
+//   move() {
+//     super.move();
+//     print('By Flying');
+//   }
+// }
+
+//   // Good till now, but what about a duck
+//   // Where should it go ? bird or fish
+//   // Sure we can create a new class called bird+fish 
+//   // But that will be redundant and logically a little bad
+//   // But we make swimming, flying as skills
+//   // and then classify animals based on that skills
+//  */
+// void main() {
+//   Animal animal = Animal();
+//   Bird bird = Bird();
+//   Fish fish = Fish();
+//   Duck duck = Duck();
+
+//   animal.move();
+//   bird.move();
+//   fish.move();
+//   duck.move();
+// }
+
+// class Animal {
+//   move() {
+//     print('\nChange Position');
+//   }
+// }
+
+// mixin canFly {
+//   void fly() {
+//     print('flying');
+//   }
+// }
+
+// mixin canSwim {
+//   void swim() {
+//     print('swimming');
+//   }
+// }
+
+// class Fish extends Animal with canSwim {
+//   move() {
+//     super.move();
+//     swim();
+//   }
+// }
+
+// class Bird extends Animal with canFly {
+//   move() {
+//     super.move();
+//     fly();
+//   }
+// }
+
+// class Duck extends Animal with canSwim, canFly {
+//   move() {
+//     super.move();
+//     fly();
+//     swim();
+//   }
+// }

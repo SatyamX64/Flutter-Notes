@@ -1,0 +1,29 @@
+// Backend, DataBase, https
+
+Suppose we have a database, now how can we access it
+> Simple store the admin_Credentials in Frontend
+  Whenever user updates something. Make a request to backend and change that thing in database
+
+> yeah, sounds good !
+  unless one day someone gets your source code somehow from the app and gets the admin_Credentials
+  now your company and job is in trouble. 
+
+>> To Prvent this, we try not to store any important info in Frontend
+   Infact we don't directly meddle with the database at all
+   We make a dedicated service to manage all this (eg : Firebase, or some other custom backend server)
+   We communicate with that service using APIs {Http Requests} 
+   Only the Service  has the access to modify the database
+
+# Http Request : 
+
+> convention : http endpoint or url + http verb = Action 
+  -- url is where the service or backend resides
+  -- backend dev decides what all http verb are available
+
+# Type of Requests (Http Verbs as I said)
+
+  1. get : Fetch Data
+  2. post : Store Data
+  3. patch : Update Data
+  4. delete : Delete Data
+  5. put : replace Data

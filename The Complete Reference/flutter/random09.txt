@@ -1,0 +1,14 @@
+Tree Shaking :  
+    if(something) {
+        do this
+    } else {
+        do this
+    }
+
+    only one of the block is loaded into memeory depending on the value (since other block will never be used mutually)
+
+BuildContext : 
+    It is used by the framework to determine position in widget tree
+    SomeWidget.of(context) returns the closest widget in the tree
+    whose type is SomeWidget
+

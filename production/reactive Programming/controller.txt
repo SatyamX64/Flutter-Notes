@@ -1,0 +1,3 @@
+A streamController can have only one listener at a time
+
+.brodcast() allows us to listen to a stream multiple times 

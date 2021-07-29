@@ -1,0 +1,12 @@
+# User Authentication and Token
+
+Now ofcourse, we don't want just anyone to come and change anything in database
+We want only users with access to change stuff
+
+So how do we know someone is logged In or not
+We use tokens
+
+i.e with every request to server {i.e API} we have to attach a token 
+we recieve the token as soon as we provide the server proper auth credentials
+The server then generates a token using a private key {available only to server} and sends it back
+That token then is saved in local and used for all subsequent API calls

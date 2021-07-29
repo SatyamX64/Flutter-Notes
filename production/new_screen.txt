@@ -1,0 +1,29 @@
+make a new folder with the screen name in the screens folder
+
+add file sc_screen_name.dart
+    Scaffold 
+        ListView(
+            children : [
+                components(), 
+                components(),
+                components(),
+                components(),
+            ]
+        )
+
+add file widget_component.dart in the same directory
+
+add barrel_screen_name.dart in the samr directory
+it exports all the widgets_file that are in the same folder
+this saves us the extra verbose code during imports in the sc_screen_name
+
+git commit -m "[SCREEN_NAME] add screen_name basic structure"
+
+then update the components one by one and make commit each time
+
+
+
+
+
+
+

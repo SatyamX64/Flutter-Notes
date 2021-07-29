@@ -1,0 +1,45 @@
+• A BuildContext instance is used by Flutter to know details about the widget when the
+tree is being traversed;
+• We will see that calling SomeWidget.of(context) returns the closest widget in the tree
+whose type is SomeWidget;
+• Each widget has its own BuildContext instance which becomes the parent context of the
+widget(s) returned by its build method
+
+>>
+A class becomes a Flutter widget when it subclasses StatelessWidget or StatefulWidget and
+overrides the Widget build(...); abstract method. That’s it:
+
+>>
+First of all, there’s the need to say that there are NO performance differences between a stateful
+widget and a stateless widget. You don’t have to think that a stateless widget is an optimized
+version of a stateful one or vice versa.
+
+Actually a StatelessWidget can be seen as a StatefulWidget without the
+setState() method. When creating a stateful widget, the state is clearly visible
+because it’s a separated private class:
+    // Widget
+    class Counter extends StatefulWidget { ... }
+    // Widget's state
+    class _CounterState extends State<Counter> { ... }
+A stateless widget is just syntactic sugar for those cases in which you don’t need
+to create a custom state. A StatelessWidget has a state too but you can’t see it
+because it’s not meant to be manually changed.
+
+
+>>
+In general, if every instance variable of your widget can be marked final, then use stateless   
+
+>> Const Constructor
+
+Using const constructors on widgets is like caching
+them: once created, they will never be re-built again.
+
+>>
+    1. Flutter looks first if the home parameter is set;
+    2. if home is null, then the routes parameter is chosen;
+    3. if routes is null, then the onGenerateRoute callback is chosen;
+    4. if none of the above resolved to a valid call, the onUnknownRoute callback is called
+
+    // Generally best is to use initialRoute + onGenerateRoute + onUnknownRoute
+
+

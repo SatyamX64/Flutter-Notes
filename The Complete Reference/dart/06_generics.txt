@@ -1,0 +1,57 @@
+
+# generics
+
+    class<T> sum{
+        // we can now use T as a data type in this class
+        add(T a, T b){
+            return a+b; // if you send string+int complier will tell you right away
+        }
+    }
+
+    you might think that
+
+    class sum{
+
+        add(dynamic a, dynamic b){
+            return a+b; // does the same thing
+                        // well yes, but the type safety is lost. You can send a string + int here and it will fail during runtime
+        }
+    }
+
+    So Prioritze use of generics over dynamic if possibile
+
+We can also have more than one generics
+
+abstract class Cache<T> {
+    final T _obj;
+    Cache(this._obj);
+    T get value => _obj;
+    void handle();
+}
+
+
+class CloudCache<T, K> extends Cache<T> {
+    CloudCache(T obj, K obj2) : super(obj);
+    void handle() {}
+}
+
+# We can also restrict generics to a certain type
+
+    abstract class Cache<T extends num> { }
+
+
+# A non generic class can also have generic methods , eg :
+
+    class Example {
+        void doSomething<T>(T value) { ... }
+    }
+
+
+# The external keyword is used to interact with the Dart VM as it loads specific
+pieces of code.
+
+In other words, external is used to say
+"the body of this function is not here, in the Dart file, but it’s located somewhere in
+the VM
+
+No use for regular programmers

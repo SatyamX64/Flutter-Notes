@@ -1,0 +1,135 @@
+## 
+
+    The import directive accepts a string which must contain a particular scheme. For built-in
+    libraries you have to use the dart: prefix followed by the library name:
+    import 'dart:math';
+    import 'dart:io';
+    import 'dart:html';
+    Everything else that doesn’t belong to the Dart SDK, such as a custom library created by you
+    or another developer in the community, must be prefixed by package.
+    import 'package:fraction.dart';
+    import 'package:path/to/file/library.dart';
+
+    You can selectively import or exclude types using the show and hide keywords:
+    • import 'package:libraryOne.dart' show MyClass; Imports only MyClass and discards
+    all the rest.
+    • import 'package:libraryTwo.dart' hide MyClass; Imports everything except MyClass.
+
+
+>> late final double a = takesLongTime();
+The function takesLongTime() will only be called once 'a' is
+accessed
+
+
+>> Virtual Methods
+==================================
+class A {}
+class B extends A {}
+As you might expect, A is called superclass while B is the subclass (or "child class"). Methods
+can be overridden in subclasses because they all are "virtual" by default.
+ The term virtual indicates the possibility to redefine the behavior of a method in
+the subclasses. It’s a very common OOP concept.
+Actually Dart doesn’t have the virtual keyword but it’s "implicit" because any method can be
+overridden along the hierarchy. 
+
+>> Covarinats 
+===================================
+Used when you want to change the data type to a subtype (eg num to int, double or vice versa) of super class members 
+
+This will show error : 
+
+    abstract class Fruit {}
+    class Apple extends Fruit {}
+    class Grape extends Fruit {}
+    class Banana extends Fruit {}
+    abstract class Mammal {
+        void eat(Fruit f);
+    }
+    class Human extends Mammal {
+        // Ok
+        void eat(Fruit f) => print("Fruit");
+    }
+    class Monkey extends Mammal {
+        // Error
+        void eat(Banana f) => print("Banana");
+    }
+
+This won't :
+
+    class Monkey extends Mammal {
+        void eat(covariant Banana f) => print("Banana");
+    }
+
+Usually the superclass method is the best place where you could use
+covariant because it removes the "subtype constrain" along the entire hierarchy.
+
+>> extensions
+
+These are generally used when we want to modify a flutter/dart source code class
+Ofcourse we can use extensions on any normal class too, to add new functions, getters, variables etc
+
+extension cannot be used on dynamic variables.
+like it might compile successfully, but will give runtime error
+
+eg : we want to add a new .toXYZ() method on strings.
+    
+    extension FractionExt on String {
+    bool isFraction() => ...
+    // Converts a string into a fraction
+    Fraction toFraction() => Fraction.fromString(this);
+    }
+    
+    dynamic demo = "1/2";
+    demo.isFraction(); // runtime error
+    string/var/final demo = "1/2"; works
+
+
+
+>> Every class in dart inherits from Object class
+
+So it has methods like toString(), == , hascode etc already
+we need to override them generally to make them more meaningful for use
+
+== by default returns true, only if both object reference to same location
+
+
+>> == override
+
+class Example {
+    int a;
+    Example(this.a);
+    @override
+    bool operator ==(Object other) {
+        // 1.
+        if (identical(this, other))
+        return true;
+        // 2.
+        if (other is Example) {
+            final example = other;
+            // 3.
+            return runtimeType == example.runtimeType &&
+            a == example.a;
+        } else {
+            return false;
+        }
+    }
+    // 4.
+    @override
+    int get hashCode => a.hashCode;
+}
+
+identical checks if they reference the same location or not
+.runtimeType gives back runtimeType
+
+IMP: We need to override the hashcode method if we are overriding == (reason pg127)
+
+
+>> implementing >, < (less than) for class
+    1. implements Comparable<Fraction> 
+    2. @override
+        int compareTo(Fraction other) {
+        if (toDouble() < other.toDouble()) return -1; // -1,1 is just convention. We can return any positive/negative number
+        if (toDouble() > other.toDouble()) return 1;
+        return 0;
+        } 
+

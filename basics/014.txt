@@ -1,0 +1,41 @@
+# Async await
+
+More concise way compared to then-catchError
+
+#video 10.12
+
+Future Fun() async{
+    bunch of risky time taking statements
+}.then((value){
+    statements that depend on value 
+}).catchError((){
+    runs if any one of above fails
+}).then((){
+   runs in all case
+})
+
+
+// then, catchError etc also return a future
+
+so somewhere down the line, we also had 
+
+getData() async{
+    Fun().then().catchError();
+}
+
+Now instead of all this we can also use
+
+Future Fun() async {
+    try{
+        await (bunch of risky statements)
+        statements that depend on value
+    }catch(e){
+        runs if any of above fails
+    }finally{
+        statements that had to run regardless, but only after the async call or error
+    }
+}
+
+# We have to await for showDialog if we want the execution to stop unless it's popped
+
+# RefreshIndicator Widget for Pull to refresh

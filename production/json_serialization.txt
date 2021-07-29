@@ -1,0 +1,63 @@
+Flutter Doc : https://flutter.dev/docs/development/data-and-backend/json
+
+serialization/encoding a data into json means converting some data into json
+deserialization/decoding means generating data from a json
+
+We will often work with backend services that use data  in json, so we need ways to convert it 
+    There are 2 ways to do it : 
+        1. Manual (Not recommended for larger Projects)
+        2. Automatic
+
+    
+
+Manual JSON serialization
+
+    1. In-line 
+
+        String jsonString = {
+          "name": "John Smith",
+          "email": "john@example.com"
+        };
+
+        Map<String, dynamic> user = jsonDecode(jsonString);
+        print('Howdy, ${user['name']}!');     // As we can see type safety is lost, we might get null in we make a typo        
+        print('We sent the verification link to ${user['email']}.');
+
+    
+    2. Inside Models
+
+        class User {
+          final String name;
+          final String email;
+
+          User(this.name, this.email);
+
+          User.fromJson(Map<String, dynamic> json)
+              : name = json['name'],    // we can make a typo-mistake here
+                email = json['email'];
+
+          Map<String, dynamic> toJson() => {
+                'name': name,
+                'email': email,
+              };
+        }
+
+        // We make fromJson, toJson functions inside of class
+
+        Map<String, dynamic> userMap = jsonDecode(jsonString); // implicitly calls the .toJson method
+        var user = User.fromJson(userMap);
+
+        print('Howdy, ${user.name}!');
+        print('We sent the verification link to ${user.email}.');
+
+
+
+Automatic JSON serialization
+
+We can do this using external packages, two most used packages are : json_serializable and built_value
+
+json_serializable illustrated here : https://flutter.dev/docs/development/data-and-backend/json#manual-encoding
+
+
+
+    

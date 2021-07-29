@@ -1,0 +1,24 @@
+immutable means we cannot change a class after it has been instantiated
+
+eg : 
+    class Person {
+        String name;
+        String id;
+
+        Person(this,name, this.id);
+    }
+
+    var monitor = Person('Rohan', 23);
+
+    So, now monitor is Rohan whose id is 23
+    Suppose Rohan tenure end and we need a new monitor. 
+    For this we won't change Rohan's name to Sumit and his id to 24
+    We will simply make a new Person('Sumit', 24) and assign him as monitor
+
+    So all in all, monitor.name = 'xyz' is not allowed
+    we have to do monitor = Person('Sumit',24)
+
+
+add annotation @immutable over class to make it immutable in dart
+// all members of immutable class are final as a result, since they won't change after init 
+

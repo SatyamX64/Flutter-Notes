@@ -1,0 +1,21 @@
+"*.g.dart" is convention of naming generated files, with * being the file name
+
+"$_" infront of class is just a convention
+it means that it is a generated class.
+
+So there are certain things that we need from a class :
+    serialization    // we can use json_serializer for this
+    toString()
+    hashcode         // we can use equatable for this
+    value type (i.e object with equal values are equal)    // we can use equatable for this or override == manually
+
+Since we need this almost for all classes and it requires a lot of boiler plate, we generate this code
+by using our generator class and defing all rules there.
+
+source_gen basically means source code generation, and it is the base of packages like json_serializer or built_value
+
+To generate source code : 
+    add build_runner dev dependency
+    add some_code_generator
+    define a generator class
+    pub run build_runner watch/read      (read is one-time, watch continuously generates code on change in generator)

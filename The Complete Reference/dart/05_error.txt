@@ -1,0 +1,91 @@
+>> Error vs Exception
+
+We don't want to just catch everything.
+eg : In a normal dart list,we get a error on out of bounds not exception
+we don't want to catch it, because this is a error that developer needs to see 
+
+but say you couldn't login due to wrong password, then that is a exception you want to catch
+because then you'll run some other logic based on that
+
+it's all dependent on you, what you want to catch or not. This was just to give a general idea
+
+
+prefer not to use only a single catch block, since it will catch errors as well as exceptions
+
+try {
+    // code...
+} on Exception catch (e) {
+    // handle...
+}
+
+This is a slightly better approach since it only catches exception type, and we can make our custom exceptions too btw
+
+## Use rethrow instead of using throw twice, if you want to throw something again, since it preserves the stack frame
+## Naming convention for custom exception :  XYZException
+
+>> throw 
+
+used to throw exceptions. 
+Some common exceptions we may use  
+• DeferredLoadException
+• FormatException
+• IntegerDivisionByZeroException
+• IOException
+• IsolateSpawnException
+• TimeoutException
+
+and we can also implement our own  exceptions like : (recommended)
+class FractionDivisionByZero implements Exception {
+    final String message;
+    const FractionDivisionByZero(this.message); 
+    @override
+    String toString() => message;
+}
+
+
+other than these, we can throw anything as long as it is a string
+
+try {
+
+} on someSpecficException {
+
+} on someOther catch(e) {
+    // e is instance of whatever was thrown
+} catch{
+    // comes here if thrown exception is none of those 2 specifics
+} finally {
+    // always here, even after exception
+}
+
+>> Some common exceptions   
+    • DeferredLoadException
+    • FormatException
+    • IntegerDivisionByZeroException
+    • IOException
+    • IsolateSpawnException
+    • TimeoutException
+    
+>> Error vs Exception
+
+We don't want to just catch everything.
+eg : In a normal dart list,we get a error on out of bounds not exception
+we don't want to catch it, because this is a error that developer needs to see 
+
+but say you couldn't login due to wrong password, then that is a exception you want to catch
+because then you'll run some other logic based on that
+
+it's all dependent on you, what you want to catch or not. This was just to give a general idea
+
+
+prefer not to use only a single catch block, since it will catch errors as well as exceptions
+
+try {
+    // code...
+} on Exception catch (e) {
+    // handle...
+}
+
+This is a slightly better approach since it only catches exception type, and we can make our custom exceptions too btw
+
+## Use rethrow instead of using throw twice, if you want to throw something again, since it preserves the stack frame
+## Naming convention for custom exception :  XYZException

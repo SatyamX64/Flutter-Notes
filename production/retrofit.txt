@@ -1,0 +1,8 @@
+If you're field is different in client side compared to server side, then use  @JsonKey(name: 'image')
+now a memeber named url can use the data that comes in "image" key from backend and 
+data will be sent in "image" key when sending post req to backend
+
+Can be seen here in action : 
+// https://github.com/SatyamX64/findsea/commit/6018b900ca39f6bc9489a20c1eb3f94d8837fab4
+
+

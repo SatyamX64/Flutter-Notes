@@ -1,0 +1,56 @@
+# Future 
+
+void main() async {
+  var myFuture = Future(() async {
+    return 'Third';
+  });
+  print('First');
+  myFuture.then((value) => print(value));
+  print('Second');
+}
+
+// How Flutter works here is :
+// It resolves all the sync calls first
+// When it encounters async call it keeps it in back of mind
+// as all the sync calls are finished it goes by one by one
+// and runs all the async calls
+
+
+
+// So now instead of using didChangeDependencies(), we can also use this hack
+// 
+// init(){
+//  Future.delayed(Duration.zero).then(_){
+//  arg = Provider / Modal.of(context) etc.
+//  }
+//  super.initState();
+// }
+
+// So these 2 functions are same as well, because dart will always skip and come back for future statements
+// Fun1() {
+//  future_worth_task();
+//  normal_task();
+// }
+// 
+// Fun2() {
+//  normal_task(); 
+//  future_worth_task();
+// }
+
+
+// Btw, if listen is false then provider can be used in init too
+
+#Video 10.8
+
+void main() async {
+  var myFuture = Future(() async {
+    return 'Third';
+  });
+  print('First');
+  myFuture.then((value) {
+    print(value);
+  }).catchError((_) {
+    print('Runs if catch error in upper block');
+  }).then((value) => print('Runs after both others have completed'));
+  print('Second');
+}

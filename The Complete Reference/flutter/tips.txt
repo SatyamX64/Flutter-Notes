@@ -1,0 +1,117 @@
+## Use google_fonts package during developement, and when you finalize fonts, download and add them the classic way
+
+## download a lint rules file from thecompletereference.com
+
+## TreeShaking
+
+    Compiler will automatically remove any dead code in scenarios like :
+
+        const kDemo = true;
+
+        if(kDemo){
+            ...
+        }else {
+            --- // No matter what is written here, Compiler doesn't care and ignores it completely
+        }
+
+    
+    Dart foundation class gives us 3 constants : kDebugMode, kProfileMode, kReleaseMode
+    We can use them and write complex logic without worrying about performance, since TreeShaking happens
+
+    eg :    
+            if(kReleaseMode){
+                full Complex logic
+            }
+
+            if(kDebugMode) {
+                full complex logic
+            } else if(kProfileMode) {       
+                full complex logic
+            }
+
+            // Compiler will always go through only one of these complex logics, so no need to worry about performance degradation
+
+
+>> Const Constructor
+
+Using const constructors on widgets is like caching
+them: once created, they will never be re-built again.
+
+
+>> IMPORTANT : Always prefer a widget over a function 
+
+    this : 
+        class FooterWidget extends StatelessWidget {
+          const FooterWidget();
+          @override
+          Widget build(BuildContext context) {
+            return Column(mainAxisSize: MainAxisSize.min, children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const [
+                Icon(Icons.email),
+                Icon(Icons.tablet_mac),
+              ]),
+              const Text("Developed by X"),
+            ]);
+          }
+        }
+
+    over this :    
+        Widget footerWidget(BuildContext context) =>
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+            Icon(Icons.email),
+            Icon(Icons.tablet_mac),
+            Icon(Icons.tune)
+          ]),
+          const Text("Developed by X"),
+        ]);        
+
+    because :
+        • Functions of course doesn’t have const constructors.
+        • Flutter is forced to rebuild widgets returned by a function every time because it knows
+        nothing about them (no BuildContext is provided).
+        • Classes are leaves of the widget tree but functions aren’t and thus there’s no BuildContext
+        available.
+
+    Widgets can be cached thanks to const constructors; functions can NOT be cached and thus
+    they’re executed every time. You should (or actually... must!) always rely on reusable widgets
+    rather than functions.
+
+
+OrientationBuilder , LayoutBuilder, MediaQuery
+
+    >> MediaQuery always returns the same width 
+    >> LayoutBuilder will return the max width allowed by parent
+    >> If we use MediaQuery.orientation, we will get the orientation 
+    >> If we use orientation builder, it will just check if the parent is in landscape or not
+        eg : suppose a keyboard pops up, so the remaining area gets width>length, then orientationBulider will build the landscape UI
+        whereas if we used MediaQuery.orientation it will still be portrait
+
+
+setState should only updates values, computing them inside setState is not recommended
+
+
+    void _increment(int value) async {
+      setState(() {
+        _counter += value;
+      });
+      await writeToFile(_counter);
+    }
+
+    // ... rather than calling the function inside the state updater:
+    void _increment(int value) {
+      setState(() async {
+        _counter += value;
+        await writeToFile(_counter);
+      });
+    }    
+
+
+>> Do NOT define home and initialRoute together because it’d be a conflict that might end
+   up in an unexpected behavior.
+
+>> To navigate without using context, use a GlobalKey
+    // Although prioritize the standard way as much as possible
+
+
+>> Use Provider to share data between screens, don't send data using navigators in general

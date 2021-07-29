@@ -1,0 +1,27 @@
+when making bloc state 
+
+    think about all possible views you want to target
+    think what all things must the UI know at any state
+        eg : A error screen will need a error message, 
+             home screen might need data list and a bool to mark end of pagination, 
+             loading screen might need a boolean check etc. 
+        use them all as the state properties
+    make a state corresponding to each UI ( using a factory )
+    have bool getters/properties to check which state it is
+        i.e If we have n possible states, then there should be 'n' boolean checkers
+    
+    make state using built_value, this way we will we able to compare two states based on value.
+    so extra re-builds won't be performed on same state
+
+
+when making bloc event 
+
+    think what all action will happen from user side
+        eg : he can search for videos, he can scroll down the list trigerring pagination 
+    
+    make a abstract class fooEvent and then make a new class for each interaction, (inherit from fooEvent)
+    each event should have properties that user might have input 
+        eg : In a search event, user will enter some query, so we will include that as a field in our searchEvent 
+             Similarly in a fetchNext event, user might not give any explicit info, so we don't need anything 
+
+        

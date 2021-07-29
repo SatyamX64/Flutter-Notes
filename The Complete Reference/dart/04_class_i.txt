@@ -1,0 +1,290 @@
+>> Dart has NO method overload so you cannot have more than a function with the same name.
+Although we can use named constructors
+
+>> The keyword this refers to the current instance of the class
+
+
+>> In Dart there cannot be nested classes
+
+>> There is no public, protected, private in dart.
+   Just use _ to make content private to a file     
+
+The Cascade operator '..'
+It’s just a shorthand version you can use when there are multiple values of the same objects that
+has to be initialized. You can do the same even with methods but the returned value, if any, will
+be ignored. So we generally use it for void Callbacks
+
+
+## constructors bodies are always executed after variable initialization
+   This explains why we have to use late for class variables even tho they are initialized in constructors
+
+   The Dart team recommends going for the "initializing formal" 1 approach as it’s more
+   readable and it initializes the variables immediately.
+   
+   class Fraction {
+      int _numerator;
+      int _denominator;
+      Fraction(this._numerator, this._denominator);
+   }
+   
+   It’s just syntactic sugar to immediately assign values to members. In this case, variables
+   initialization is executed first so no need to use nullable types or late. This kind of
+   initialization happens before the execution of the constructor’s body.
+
+## initializer List
+   It’s executed before the body and thus variables are immediately initialized.
+   No need for nullable types or late
+
+   It is generally used to initialize the Private Memebers using the passed parameters
+   
+   eg: 
+   class Test {
+      int _secret;
+      double _superSecret;
+      Test(int age, double wallet)
+      : _secret = age,
+      _superSecret = wallet;
+   }
+
+
+## Redirecting constructors
+Sometimes you might have a constructor that does almost the same thing already implemented
+by another one. It may be the case to use redirecting constructors in order to avoid code duplication:
+Fraction(this._numerator, this._denominator);
+// Represents '1/2'
+Fraction.oneHalf() : this(1, 2);
+// Represents integers, like '3' which is '3/1'
+Fraction.whole(int val) : this(val, 1);
+Where Fraction.oneHalf() is just another way to call Fraction(1, 2) but you’ve avoided code
+repetition. This feature is very powerful when mixed with named constructors.
+
+
+## Factory methods
+
+They are like static methods and don't have access to this
+There cannot be together a factory and a "normal" constructor with the same name.
+
+// We generally use private constructors while using factory
+
+Factory method return a object of Similar type as the Class (Not necessarily the exact same, eg : int,double,num are similar types)
+Factories are called "normally" like if they were a regular constructor:
+
+1.It is generally used when we want to return an instance of subclass instead of the class itself
+  
+eg : 
+
+enum ShapeType {
+  triangle,
+  rectangle
+}
+
+abstract class Shape {
+  factory Shape(ShapeType type) {
+    switch (type) {
+      case ShapeType.triangle: return Triangle();
+      case ShapeType.rectangle: return Rectangle();
+      default: return null;
+    }
+  }
+
+  void draw();
+}
+
+class Triangle implements Shape {
+  @override
+  void draw() {
+    print("TRIANGLE");
+  }
+}
+
+class Rectangle implements Shape {
+  @override
+  void draw() {
+    print("RECTANGLE");
+  }
+}
+
+
+2. For caching 
+
+class Logger {
+  final String name;
+  bool mute = false;
+
+  // _cache is library-private, thanks to
+  // the _ in front of its name.
+  static final Map<String, Logger> _cache =
+      <String, Logger>{};
+
+  factory Logger(String name) { 
+    return _cache.putIfAbsent(
+        name, () => Logger._internal(name));
+  }
+
+  factory Logger.fromJson(Map<String, Object> json) {
+    return Logger(json['name'].toString());
+  }
+
+  Logger._internal(this.name);
+
+  void log(String msg) {
+    if (!mute) print(msg);
+  }
+}
+
+## Const constructors
+In Dart you can append the const keyword in front of a constructor only if you’re going to
+initialize a series of final (immutable) variables.
+// Compiles
+class Compiles {
+   final int a;
+   final int b;
+   const Compiles(this.a, this.b);
+}
+// Does not compile because a is mutable (not final)
+class DoesNot {
+   int a;
+   final int b;
+   const DoesNot(this.a, this.b);
+}
+If your class only has final variables it’s said to be an "immutable class" and you should really
+instantiate it with a const constructor.
+
+Any class with a constant constructor can be used as a annotation
+
+class _Override {
+   const _Override();
+}
+// the actual "@override" annotation
+const Object override = _Override();
+
+The @override annotation does nothing in practice: it just tells the developer that defineMethod
+has been overridden.
+
+
+## Operator Overloading
+
+class Fraction {
+   Fraction operator+(Fraction other) =>
+      Fraction(
+         _numerator * other._denominator +
+         _denominator * other._numerator,
+         _denominator * other._denominator
+      );
+   Fraction operator-(Fraction other) => ...
+   Fraction operator*(Fraction other) => ...
+   Fraction operator/(Fraction other) => ...
+}
+
+This way we can avoid functions for basic operations like 
+• Arithmetic operators like +, -, *, or /.
+• Relational operators such as >=, <=, > or <.
+• Equality operators like != and ==
+
+You cannot overload the same operator more than once in the same class.
+
+## Call function
+There is a special call() method which is very closely related to an operator overload because
+it allows class instanche to be called like if they were functions with the () operator.
+
+// The Class which implement call() are called callable classes
+eg : 
+
+Something like this 
+
+void test(String something) {
+   print(something);
+}
+
+can be converted into
+
+// Create this inside 'my_test.dart' for example
+class _Test {
+   const _Test();
+   void call(String something) {
+      print(something);
+   }
+}
+
+const test = _Test();
+
+// Somewhere else, for example in main.dart
+import 'package:myapp/my_test.dart';
+void main() {
+   test("Hello"); // The class Test is being treated as a function
+}
+
+
+## Cloning objects
+
+class Person {
+   final String name;
+   final int age;
+   const Person({
+      required this.name,
+      required this.age,
+   });
+}
+
+void main() {
+   const me = const Person(
+      name: "Alberto",
+      age: 25
+   );
+   const anotherMe = me;
+}
+
+Here me and anotherMe hold reference to the same object. Any changes in one will reflect to the other too
+
+There is no official method to clone objects directly, although there is a widely accepted popular approach
+// By making a  custom copyWith Function that accepts all the parameters optionally and returns a new object
+
+class Person {
+   final String name;
+   final int age;
+   const Person({
+      required this.name,
+      required this.age,
+   });
+   Person copyWith({
+      String? name,
+      int? age,
+   }) => Person(
+      name: name ?? this.name,
+      age: age ?? this.age
+   );
+   @override
+   String toString() => "$name, $age";
+}
+
+Person copyWith({
+   List<Skills>? skills,
+   }) => Person(
+   skills: skills ?? this.skills  // This is wrong, since List is also a object so new skills just holds a refernce to the old skills 
+);
+
+// So the Correct way, to copy Parameters that are not primitive is 
+Person(
+   skills: skills ?? this.skills.map((p) => p.copyWith()).toList ();
+);
+
+// In this way you’re making a copy of the entire list rather than passing a reference
+
+// For primitive, we can just use
+
+Person copyWith({
+   List<int>? values,
+   }) => Person(
+   values: values ?? []..addAll(this.values)
+);
+
+
+• When making copies, be sure that classes (like generic containers) are deep copied using
+the convenient map((x) => x.copyWith()) strategy.
+• If you have a list of primitive types (like doubles or int) you can use the []..addAll()
+shortcut. Do this only with primitive types.
+
+
+
+
+

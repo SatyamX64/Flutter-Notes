@@ -1,0 +1,121 @@
+// Navigator and going between screens - part I
+
+# One common error
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Center(
+        child: RaisedButton(
+          child: Text("Foo"),
+          onPressed: () => Navigator.pushNamed(context, "/"),
+        ),
+      ),
+    );
+  }
+}
+
+// If we use this it will throw a error, since Navigator.of(context) requires the {context} to come from a Material app
+   But here the context is of MyApp which is a parent of MaterialApp, that's why it will fail 
+   Error : Navigator operation requested with a context that does not include a Navigator.
+
+// Solution : use a builder or take out  the code into a new subtree
+   https://stackoverflow.com/questions/44004451/navigator-operation-requested-with-a-context-that-does-not-include-a-navigator
+
+
+
+# Basic use
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      // '/' is home byDefault
+      // we can also set the initialRoute
+      routes: {
+        '/': (context) => MyHome(),
+        '/I': (context) => OtherWidgetI(),
+        '/II': (context) => OtherWidgetII(),
+        '/III': (context) => OtherWidgetIII(),
+      },
+    );
+  }
+}
+
+class MyHome extends StatelessWidget {
+  const MyHome({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 1'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/I');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetI extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 2'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/II');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetII extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Page 3'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/III');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OtherWidgetIII extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Home'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/');
+          },
+        ),
+      ),
+    );
+  }
+}

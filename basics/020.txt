@@ -1,0 +1,11 @@
+# One cool thing while creating an app
+
+1. First decide everything to be on the whiteBoard (literally everything)
+2. Make a new Flutter Project and create a folder called screens
+3. Make all the screens file
+4. Make lean UI for all the screens assuming you have the data inside of widget
+5. Make a models folder and add the Models you have in the project 
+6. Then make the Provider folder and add Provider to manage your models
+
+
+Video: 13.3 is a good example for all this

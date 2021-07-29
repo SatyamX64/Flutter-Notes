@@ -1,0 +1,225 @@
+// To change base
+var c = int.parse("13", radix: 6); // Converts from 13 base 6
+
+// 1. If the string is not a number, val is null
+double? val = double.tryParse("12@.3x_"); // null
+double? val = double.tryParse("120.343"); // 120.343
+
+
+// 2. The onError callback is called when parsing fails
+var a = int.parse("1_6", onError: (value) => 0); // 0
+var a = int.parse("16", onError: (value) => 0); // 16
+
+Keep in mind that parse() is deprecated: you should prefer tryParse()
+// parse assumes that string is well-formed, so take care of errors when using it   
+
+A string can be either single or multiline. Single line strings are shown above using single or
+double quotes, and multiline strings are written using triple quotes. They might be useful when
+you want to nicely format the code to make it more readable.
+// Very useful for SQL queries, for example
+var query = """
+SELECT name, surname, age
+FROM people
+WHERE age >= 18
+ORDER BY name DESC
+""";
+
+In Dart there isn’t a char type representing a single character because there are only strings. 
+If you want to access a particular character of a string you have to use the [] operator:
+The returned value of name[0] is a String whose length is 1
+
+In case of a string longer than a single line, avoid the + operator and prefer a simple line break.
+It’s just something recommended by the Dart for styling reasons, there are no performance
+implications at all. Try to be as consistent as possible with the language guidelines!
+// Ok
+var s = 'I am going to the'
+'second line';
+// Still ok but '+' can be omitted
+var s = 'I am going to the' +
+'second line';
+
+##
+Since strings are immutable, making too many concatenations with the + operator might be
+inefficient. In such cases it’d be better if you used a StringBuffer which efficiently concatenates strings. 
+For example:
+var value = "";
+for(var i = 0; i < 900000; ++i) {
+value += "$i ";
+}
+Each time the + operator is called, value is assigned with a new instance which merges the old
+value and the new one. In other words, this code creates for 900000 times a new String object,
+one for each iteration, and it’s not optimal at all. Here’s the way to go:
+
+var buffer = StringBuffer();
+for(var i = 0; i < 900000; ++i)
+buffer.write("$i ");
+var value = buffer.toString();
+
+This is much better because StringBuffer doesn’t internally create a new string on each iteration;
+the string is created only once at the moment in which toString() is called.
+
+
+##
+
+Each item of the enum has an associated number, called index, which corresponds to the zero based position of the value in the declaration.
+You can access this number by using the index property.
+
+enum Fruits { Apple, Pear, Grapes, Banana, Orange }
+void main() {
+var a = Fruits.Apple.index; // 0
+var b = Fruits.Pear.index; // 1
+var c = Fruits.Grapes.index; // 2
+}
+
+##
+NaN means not a number, it is returned by absurd statements
+eg:
+var oops = 0.0/0.0;
+bool didFail = oops.isNan;
+
+##
+
+
+By default, variables cannot be null and they must always be initialized before being
+used. It would be better if you immediately initialized them, but you could also do it in a
+second moment before they ever get utilized.
+The compiler guarantees that it can’t be null and thus no null-checks are required.
+
+You can also declare nullable types which doesn’t require to be initialized before being
+accessed and thus they’re allowed to be null. Nullables are the counterpart of non-nullable types
+because the usage of null is allowed (but the additional type safety degree is lost).
+
+int? value;
+print("$value"); // Legal, it prints 'null'
+
+// We also need ?[] if we need value at index of nullable variable
+String? name = "Alberto";
+String? first = name?[0]; // first = 'A';
+String? name;
+String? first = name?[0]; // first = 'null';
+
+Since ?[] ensures that we don't end up with a error if we try to access [] on null 
+list[0] would give error if list was null
+list?[0] would give null if list was null
+
+##
+here are the only possible conversions between nullables and non
+nullables:
+• When you’re sure that a nullable expression isn’t null, you can add a ! at the end to convert
+it to the non-nullable version.
+int? nullable = 0;
+int notNullable = nullable!;
+The ! (called "bang operator") converts a nullable value (int?) into a non-nullable value
+(int) of the same type. An exception is thrown if the nullable value is actually null.
+int? nullable;
+// An exception is thrown
+int notNullable = nullable!;
+• If you need to convert a nullable variable into a non-nullable subtype, use the typecast
+operator as (more on it later):
+num? value = 5;
+int otherValue = value as int;
+You wouldn’t be able to do int otherValue = value! because the bang operator works
+only when the type is the same. In this example, we have a num and an int so there’s the need for a cast.
+• Even if it isn’t a real conversion, the operator ?? can be used to produce a non-nullable
+value from a nullable one.
+int? nullable = 10;
+int nonNullable = nullable ?? 0;
+If the member on the left (nullable) is non-null, return its value; otherwise, evaluate and
+return the member of the right (0).
+Remember that when you’re working with nullable values, the member access operator (.) is not
+available. Instead, you have to use the null-aware member access operator (?.):
+double? pi = 3.14;
+final round1 = pi.round(); // No
+final round2 = pi?.round(); // Ok
+
+##
+Type test operators
+They are used to check the type of an object at runtime.
+Symbol Meaning                                 Example
+as     Cast a type to another                  obj as String
+is     True if the object has a certain type   obj is double
+is!    False if the object has a certain type  obj is! int
+
+// Before using "as" it is a good practice to check for compatible types using "is"
+
+// The Index cannot be nullable (using int? i = 0 doesn’t work in for loops).
+
+## Assertions
+
+// In release mode, every assert is ignored by the compiler and you’re guaranteed
+that they won’t interfere with the execution flow. Assertions work only in debug mode.
+Throw an exception 
+if the given condition
+evaluates to false. For example:
+// the method returns a json-encoded string
+final json = getJSON();
+// if length > 0 is false --> runtime exception
+assert(json.length > 0, "String cannot be empty");
+// other actions
+doParse(json);
+The first parameter of assert must be an expression returning a boolean value. The second
+parameter is an optional string you can use to tell what’s gone wrong; it will appear in the IDE
+error message window if the condition evaluates to false.
+
+Don’t remove them when you’re ready to deploy the code to the production world because
+they will be automatically discarded.
+
+##
+
+// Using final and var is allowed but it doesn’t make much sense in function Parameters.
+   Try to stick with well-defined type on almost all cases
+   eg : void fun(int a) is better than void fun(final a)
+   // Also give return type to all functions ( give void if nothing)
+
+// fun(a,b), fun({a,b}), fun([a,b])
+
+## Typedefs
+
+The typedef keyword simply gives another name to a function type so that it can be easily
+reused. Imagine you had to write a callback function for many methods:
+
+void printIntegers(void Function(String msg) logger) {
+logger("Done.");
+}
+
+void printDoubles(void Function(String msg) logger) {
+     logger("Done.");
+}
+Alternatively, rather than repeating the declaration every time, which leads to code duplication,
+you can give it an alias using the typedef keyword.
+typedef LoggerFunction = void Function(String msg);
+void printIntegers(LoggerFunction logger) {
+logger("Done int.");
+}
+void printDoubles(LoggerFunction logger) {
+logger("Done double.");
+}
+
+
+##
+
+// You can also use the library keyword to "name" your library as you prefer. 
+  // library is basically any dart file
+library super_duper_fraction;
+
+ 
+// If multiple libraries have same name function we use
+    import super_duper_fraction as sdf;
+
+    Now all the library elements can be accessed using " . ", eg  sdf.foo();
+
+// use _ to make class members private
+// Private memebers can be accessed only from the same file
+
+// So this works
+void main(){
+  var fun = Fun();
+  print(fun._run); // 20
+  
+}
+
+class Fun {
+  var _run = 20;
+}
+//
+

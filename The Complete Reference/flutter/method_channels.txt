@@ -1,0 +1,8 @@
+Available only for mobile and desktop, method channels allow Dart to call platform-specific code
+of your hosting app. Data are serialized from Dart and then deserialized in Java, Kotlin, Swift
+or Objective-C.
+
+eg:
+    const channel = MethodChannel("person");
+    final name = await channel.invokeMethod<String>("getPersonName");
+    print(name); // 'name' is a regular Dart string

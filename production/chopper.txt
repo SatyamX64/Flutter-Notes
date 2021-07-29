@@ -1,0 +1,5 @@
+We add code-genrators in dev_dependecies, and packages in dependencies
+dev_dependecies are only used to generate code, so they are not useful for user once the app is released,
+that's why these dependencies are not packed with the app.
+packages on the other hand are used in the app, so they are packed alongside in the apk
+

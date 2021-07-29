@@ -1,0 +1,27 @@
+// Platform responsive and Adaptive apps
+
+# Responsive means app works in all possible orientations and Screen Sizes
+  Sometimes some design also change depending on size & orientation
+  Adaptive means the we carry the default platfrom behaviours
+  Like IOS fonts, animations, icon designs etc so that user feels at home
+
+# MediaQuery : Used to find dimensions of the device
+
+#https://stackoverflow.com/questions/52645944/flutter-expanded-vs-flexible
+ Flexible takes the space but lets the child be
+ Expanded takes the space but also forces the child to take all space
+
+ Infact
+ Expanded(
+  child: Foo(),
+ );
+ is strictly equivalent to:
+
+ Flexible(
+  fit: FlexFit.tight,
+  child: Foo(),
+ );
+
+# Matrix4 allows us to define rotation,scaling and offset all using a single object only
+# We can pass Matrix4 to the transform property of Container
+# Video 5.6

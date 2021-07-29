@@ -1,0 +1,135 @@
+##
+    use var/ final if you're assigning value during creation
+
+        eg : var name = "foo";
+             final runs = 45;
+
+        // Now foo, will automatically infer it's type as String
+
+    use type when you don't immediately assign a variable
+
+        eg : late int runs;
+             late List<Order> order;
+
+##
+
+    int and double are derived from num 
+
+    var a = 1.5e3 means 1.5*10^3
+
+##
+
+    // 1. If the string is not a number, val is null
+    double? val = double.tryParse("12@.3x_"); // null
+    double? val = double.tryParse("120.343"); // 120.343
+    var a = int.tryParse("1_6"); // null
+    var a = int.tryParse("16"); // 16
+
+##
+
+    There is no char type as such, everything is a string
+    A string can be either single or multiline. Single line strings are shown above using single or
+    double quotes, and multiline strings are written using triple quotes.
+
+## 
+
+    String Interpolation means : 
+        var sum = 10;
+        print("The Sum is ${sum}");
+
+    It is recommended over: "The Sum is" + sum.toString()
+
+##
+
+    This is recommended
+
+        var s = ' Line First ' 
+                ' Line Second ';
+
+    over 
+
+        var s = ' Line First ' + 
+                ' Line Second ';
+
+## 
+
+    Make a string buffer, when you want to do too many concatenations
+    Since String are literals, so a new string is made and assigned on every concatenation
+    But that's not the case here, buffer only produces a new string when needed.
+    
+    Use this
+    
+        var buffer = StringBuffer();
+        for(var i = 0; i < 900000; ++i)
+            buffer.write("$i ");
+    
+        var value = buffer.toString();
+    
+    over 
+    
+        var value = "";
+        for(var i = 0; i < 900000; ++i) {
+            value += "$i ";
+        }
+
+##
+
+    enum Fruits { Apple, Pear, Grapes, Banana, Orange }
+    void main() {
+        var a = Fruits.Apple.index; // 0
+        var b = Fruits.Pear.index; // 1
+        var c = Fruits.Grapes.index; // 2
+    }
+
+
+##  
+    Absurd statements evaluate to NaN (Not a Number)
+    We can check for it  :
+        
+        var oops = 0.0 / 0.0; // evaluates to 'Not a Number' (NaN)
+        bool didIFail = oops.isNaN;
+
+##
+    All the variables are nnbd (non-nullable by default)
+    which means, they are not allowed to hold null value
+
+    bang operator ("!") is used to convert nullable to non-nullable explicitly
+    it can only be used for same types
+
+    eg :    
+        num marks = 50;
+        int grade = marks!; // error
+        int grade = marks as int; // works
+    
+
+    When working with nullable, the "." operator is not available
+    We have to use "?.", this prevents us from accessing memeber function on null
+
+    eg :
+        List?<int> marks;
+        marks!.contains(4); // will give runtime error, since contains can't be called on null
+        marks?.contains(4); // will evaluate to null since marks was null
+
+    
+## 
+    Type test operators
+        "as" : case type to another,
+               eg : obj as String
+        
+        "is" : true if object has certain type
+               eg : obj is double
+        
+        "is!" : true is object doesn't have certain type
+
+
+    use this  
+        if (grapes is Fruit) {
+            (grapes as Fruit).color = "Green";
+        }
+    
+    over 
+        (grapes as Fruit).color = "Green"; 
+        // runs but is unsafe, will throw error is grapes is null or not Fruit type
+        //so recommended way, is to check if cast is possible before doing it
+
+    

@@ -1,0 +1,21 @@
+abstract class Car{
+
+    int noOfWheels; // No values needs to be assigned
+
+    drive(); // I don't have to add function body , It is optional 
+}
+
+// Any class that inherits from it will have to implement everything that is not already implemented
+    Like maybe some function without body
+
+
+    Row(
+        children:[
+            Flexible(
+                child : Text('something')
+            ),
+            Flexible(
+                child : Text('something')
+            )
+        ]
+    )

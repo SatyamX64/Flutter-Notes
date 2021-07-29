@@ -1,0 +1,62 @@
+// Future and async
+void main() {
+  performTask();
+}
+
+void performTask(){
+  task1();
+  String result = task2();
+  task3(result);
+}
+
+void task1() {
+  print('Task 1 Complete');
+}
+
+String task2() {
+  String result= 'Something';
+  Duration five = Duration(seconds: 5);
+  Future.delayed(five, () {
+    result = 'Task 2 Data';
+    
+    //
+    print('Task 2 Complete');
+    task3(result);
+    //
+  });
+  return result;
+}
+
+// Future<String> task2() async{
+//   String result = 'Something';
+//   Duration five = Duration(seconds: 5);
+//   await Future.delayed(five, () {
+//     result = 'Task 2 Data';
+
+//     //
+//     print('Task 2 Complete');
+//     task3(result);
+//     //
+//   });
+//   print('Unrelated statmenet');
+//   return result;
+// }
+
+// String task2() {
+//   String result = 'Something';
+//   Duration five = Duration(seconds: 5);
+//   Future.delayed(five, () {
+//     result = 'Task 2 Data';
+
+//     //
+//     print('Task 2 Complete');
+//     task3(result);
+//     //
+//   });
+//   sleep(five);
+//   return result;
+// }
+
+void task3 (String result){
+  print('Task 3 Complete with $result');
+}
